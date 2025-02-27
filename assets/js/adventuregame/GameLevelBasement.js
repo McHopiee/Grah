@@ -49,63 +49,128 @@ class GameLevelBasement {
     };
 
      // Conversation flow for Asaka
-     const conversationFlowAsaka = {
+    const conversationFlowAsaka = {
       start: {
         question: "Do you remember your name?",
         answers: {
-          "No.": "no",
-          "Yes.": "yes"
+          "a. No.": "no",
+          "b. Yes.": "yes"
         }
       },
+      //string of possible conversaiton when chosen: no
       no: {
         question: "What do you remember?",
         answers: {
-          "Nothing.": "explore",
-          "Chat": "chat"
+          "a. Nothing.": "nothing",
+          "b. People seem to call me degen.": "degen"
         }
       },
-      feelingBad: {
-        question: "I'm sorry to hear that. Do you want to talk about it?",
+      nothing: {
+        question: "Okay. So, there would be no point in asking you how you got here, right?",
         answers: {
-          "Yes": "talkAboutIt",
-          "No": "changeTopic"
+          "a. I suppose not.": "not",
+          "b. Wait, I still want help with getting out of here. Will you tell me how to leave this place?": "help"
         }
       },
-      explore: {
-        question: "Exploring sounds fun! Where do you want to go?",
+      degen: {
+        question: "So you want to be called Degen? Alright, Degen. Do you know how you got here?",
         answers: {
-          "Forest": "forest",
-          "City": "city"
+          "a. No. And I don't want to be here. Help me get out.": "getout",
+          "b. Yes, I happened to find a magical potion that transported me here!": "potion"
         }
       },
-      chat: {
-        question: "Let's chat! What's on your mind?",
+      //string of possible conversation when chosen: yes
+      yes: {
+        question: "What is it?",
         answers: {
-          "Hobbies": "hobbies",
-          "Work": "work"
+          "a. Broski Moski": "broski",
+          "b. I've heard people call me degen before, so I guess that's my name.": "name"
         }
       },
-      talkAboutIt: {
-        question: "I'm here to listen. What's bothering you?",
+      broski: {
+        question: "I seriously doubt that your name is Broski Moski. But anyhow, do you know how you got here?",
         answers: {
-          "Stress": "stress",
-          "Health": "health"
+          "a. No.": "noidea",
+          "b. Yes.": "sure"
         }
       },
-      changeTopic: {
-        question: "Alright, let's change the topic. What do you want to talk about?",
+      noidea: {
+        question: "Well.. if that's the case.. would you like some help getting out of here?",
         answers: {
-          "Hobbies": "hobbies",
-          "Work": "work"
+          "a. Yes. Please.": "please",
+          "b. No. I don't get help from some female..": "ew"
+        }
+      },
+      //Bad ending one : ew 
+      ew: {
+        question: "What a disappointment.. you're never getting out of here. ( Asaka ends the conversation. What a terrible response. )",
+        answers: {
+          "End. You have achieved bad ending one. ( Why did you even choose that option? )":"BadendingOne"
+        }
+      },
+      // Good ending one : giving it a try 
+      please:{
+        question: "Have you tried just.. ESCaping out of the basement?",
+        answers: {
+          "a. No. Why would I ever try that? That's terrible information.": "terrible",
+          "b. I haven't thought about that. Let me give it a try! ( When out of the conversation, press ESC. )": "endingOne"
+        }
+      },
+      //Bad ending two : reject info 
+      terrible:{
+        question: "Fine. Do not accept my help. But don't say I didn't try to help. ( Asaka stops talking to you. )",
+        answers: {
+          "End. You have achieved bad ending two.":"BadEndingTwo"
+        }
+      },
+      name: {
+        question: "I see. So, Degen. How did you get here?",
+        answers: {
+          "a. I rode on a unicorn and somehow ended up here!!": "unicorn",
+          "b. I'm really not sure. Could you help me get out?": "notsure"
+        }
+      },
+      // Bad Ending Three : A unicorn?
+      unicorn: {
+        question: "Oh no.. I believe you're too far gone. ( Asaka turns away, disappointed to have even started a conversation with you. )",
+        answers: {
+          "End. You have achieved bad ending three.": "BadEndingThree"
+        }
+      },
+      //good ending two : odd, but okay!
+      notsure: {
+        question: "Try ESCaping out of here. It works wonders.",
+        answers: {
+          "What odd advice.. but I will give it a try. ( Press ESC once out of the conversation)": "GoodEndingTwo"
+        }
+      },
+      sure: {
+        question: "Then, do you mind telling me how you got here?",
+        answers: {
+          "a. Truthfully, I drank a potion and I was magically teleported here.": "potion",
+          "b. Okay, I lied, I don't know how I got here. Can you help me get out?": "lied"
+        }
+      },
+      //bad ending four
+      potion: {
+        question: "I'm afraid you're too insane to understand the rest of my advice. ( Asaka stops talking to you, cringing as you walk away. )",
+        answers: {
+          "End. You have achieved bad ending four.": "BadEndingFour",
+        }
+      },
+      //bad ending five 
+      lied: {
+        question: "Of course I won't, you lied to me! Why would you even lie in the first place? ( Asaka shakes her head and stops talking to you. )",
+        answers: {
+          "End. You have achieved bad ending five": "BadEndingFive",
         }
       },
       // Add more conversation nodes as needed
     };
 
-
     // NPC data for Asaka
     const sprite_src_asaka = path + "/images/gamify/asaka.png"; // be sure to include the path
-    const sprite_greet_asaka = "You don't belong here, do you? ( Press e to interact with Asaka, she will ask you questions. There will be two options, please type in the whole response you would like to respond with. )";
+    const sprite_greet_asaka = "You don't belong here, do you?                                                       ( Press e to interact with Asaka, click your answer and press e again to continue the interaction )";
     const sprite_data_asaka = {
         id: 'Asaka',
         greeting: sprite_greet_asaka,
@@ -120,18 +185,29 @@ class GameLevelBasement {
         conversation: new Conversation(conversationFlowAsaka),
         reaction: function() {
           alert(sprite_greet_asaka);
-        },   
-        // Interaction function for Asaka
+        },
         interact: function() {
           const conversation = sprite_data_asaka.conversation;
           const question = conversation.getCurrentQuestion();
           const answers = conversation.getCurrentAnswers();
-          let answer = prompt(`${question}\n${answers.join('\n')}`);
-          if (answers.includes(answer)) {
-            conversation.answerQuestion(answer);
-          } else {
-            alert("Invalid answer. Please try again.");
-          }
+          const conversationPanel = document.getElementById('conversationPanel');
+          const conversationQuestion = document.getElementById('conversationQuestion');
+          const conversationAnswers = document.getElementById('conversationAnswers');
+
+          conversationQuestion.innerText = question;
+          conversationAnswers.innerHTML = '';
+
+          answers.forEach(answer => {
+            const button = document.createElement('button');
+            button.innerText = answer;
+            button.onclick = () => {
+              conversation.answerQuestion(answer);
+              conversationPanel.style.display = 'none';
+            };
+            conversationAnswers.appendChild(button);
+          });
+
+          conversationPanel.style.display = 'block';
         }
     };
 
