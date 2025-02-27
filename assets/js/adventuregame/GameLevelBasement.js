@@ -72,11 +72,45 @@ class GameLevelBasement {
           "b. Wait, I still want help with getting out of here. Will you tell me how to leave this place?": "help"
         }
       },
+      not: {
+        question: "Well then. I will leave you alone. ( Asaka stops talking to you for the rest of your time in the basement.)",
+        answers: {
+          "End. You have achieved bad ending six.": "badendingsix",
+        }
+      },
+      //good ending three : youre not slow !! 
+      help: {
+        question: "Ah. If that's the case, I can help. Just trying ESCaping this place.",
+        answers: {
+          "a. That's .. okay, then. I'll figure it out somehow.": "goodendingthree",
+          "b. What the skibidi is that supposed to mean? Escaping? Do you think I haven't already tried that?": "rude"
+        }
+      },
+      //bad ending six : youre a bit slow 
+      rude: {
+        question: "No, not escaping ES- you know what? Nevermind. ( Asaka turns away and ignores you. )",
+        answers: {
+          "End. You have achieved bad ending six.": "badendingsix"
+        }
+      },
       degen: {
         question: "So you want to be called Degen? Alright, Degen. Do you know how you got here?",
         answers: {
           "a. No. And I don't want to be here. Help me get out.": "getout",
-          "b. Yes, I happened to find a magical potion that transported me here!": "potion"
+          "b. Of course! I entered a different dimension and it ended up bringing me here. What else could've happened?": "dimension"
+        }
+      },
+      //good ending four : haha get it?
+      getout: {
+        question: "Well, just ESCape.",
+        answers: {
+          "What? What do you mean ESC.. ohhhh. ( Press ESC once you end this conversation. ) ": "goodendingfour",
+        }
+      },
+      dimension: {
+        question: "A different dimension? You're joking, right? ( Asaka frowns and ignore everything else you have to say, thinking you're insane. )",
+        answers: {
+          "a. End. You have achieved bad ending seven.": "badendingseven",
         }
       },
       //string of possible conversation when chosen: yes

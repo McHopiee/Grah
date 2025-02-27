@@ -17,8 +17,8 @@ hide: true
 <p style="font-family: Sour Gummy, sans-serif; font-size: 15px; font-weight: normal;">A straightforward way to find important sites without struggle. Isn't that nice? Having something right in front of you without needing to go through millions of pages trying to find it? You're welcome.</p>
 
 <div class="button">
-    <a href="https://github.com/McHopiee/HBlog" class="button link">
-        <button>HBlog Github</button>
+    <a href="https://github.com/McHopiee/Grah" class="button link">
+        <button>Grah Github</button>
     </a>
     <a href="https://mchopiee.github.io/HBlog/devops/tools/verify" class="button link">
         <button>Verify Notebook</button>
