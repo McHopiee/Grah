@@ -117,11 +117,21 @@ class Quiz {
             questionIndex: input.dataset.questionIndex,
             answer: input.value.trim()
         }));
+        console.log(answers);
+        console.log(this.correct);
         console.log("Submitted Answers:", answers);
     
         // Handle the submission logic (e.g., save answers, validate, etc.)
         alert("Your answers have been submitted!");
-    
+
+        // Check if the answers are correct
+        let score = 0;
+        for (let i=0; i<answers.length; i++) {
+            score += (answers[i].answer == this.correct[i])
+        }
+
+        alert ("You scored " + score + " out of " + answers.length);
+
         // Close the prompt and go back to the main level
         this.isOpen = false;
         this.backgroundDim.remove();

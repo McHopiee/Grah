@@ -302,18 +302,19 @@ class GameLevelBasement {
       hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
       // Linux command quiz
       quiz: { 
-        title: "Jupyter Notebook Command Quiz",
+        title: "Nezuko's insanity Quiz",
         questions: [
-          "Which shortcut is used to run a cell in Jupyter Notebook?\n1. Shift + Enter\n2. Ctrl + Enter\n3. Alt + Enter\n4. Tab + Enter",
-          "Which shortcut adds a new cell above the current cell?\n1. A\n2. B\n3. C\n4. D",
-          "Which shortcut adds a new cell below the current cell?\n1. B\n2. A\n3. C\n4. D",
-          "Which shortcut changes a cell to Markdown format?\n1. M\n2. Y\n3. R\n4. K",
-          "Which shortcut changes a cell to Code format?\n1. Y\n2. M\n3. C\n4. D",
-          "Which shortcut deletes the current cell?\n1. D, D\n2. X\n3. Del\n4. Ctrl + D",
-          "Which shortcut saves the current notebook?\n1. Ctrl + S\n2. Alt + S\n3. Shift + S\n4. Tab + S",
-          "Which shortcut restarts the kernel?\n1. 0, 0\n2. R, R\n3. K, K\n4. Shift + R",
-          "Which shortcut interrupts the kernel?\n1. I, I\n2. Ctrl + C\n3. Shift + I\n4. Alt + I",
-          "Which shortcut toggles line numbers in a cell?\n1. L\n2. N\n3. T\n4. G"
+          "What's 1+1?\n1. 2\n2. 78\n3. Alt + 3\n4. 34856",
+          "What's 32+18?\n1. 50\n2. 60\n3. 87\n4. 14",
+          "What's 24 x 12?\n1. 288\n2. 563\n3. 9735\n4. 32",
+          "What's 72 / 8?\n1. 8\n2. 2\n3. 9\n4. 27",
+          "What is a dinosaur's favorite food?\n1. What?\n2. Chicken\n3. People\n4. Plants",
+          "What is the capital of France?\n1. London\n2. Paris\n3. Berlin\n4. Rome",
+          "What is the capital of Japan?\n1. Bangkok\n2. Beijing\n3. Seoul\n4. Tokyo",
+          "What is a baby kangaroo called?\n1. Joey\n2. Baby Kangaroo\n3. Kangaroo Jr.\n4. Kangaroolet",
+          "What is the largest mammal in the world?\n1. Elephant\n2. Blue Whale\n3. Giraffe\n4. Human",
+          "What is the largest planet in our solar system?\n1. Earth\n2. Saturn\n3. Mars\n4. Jupiter"
+
         ] 
       },
       reaction: function() {
@@ -322,6 +323,7 @@ class GameLevelBasement {
       interact: function() {
         let quiz = new Quiz(); // Create a new Quiz instance
         quiz.initialize();
+        quiz.correct = [1, 1, 1, 3, 3, 2, 4, 1, 2, 4]
         quiz.openPanel(sprite_data_nezuko.quiz);
       }
     }
