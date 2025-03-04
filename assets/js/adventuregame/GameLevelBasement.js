@@ -260,31 +260,91 @@ class GameLevelBasement {
         orientation: {rows: 4, columns: 3 },
         down: {row: 0, start: 0, columns: 3 },  // This is the stationary npc, down is default 
         hitbox: { widthPercentage: 0.1, heightPercentage: 0.1 },
-        // GitHub command quiz 
-        quiz: { 
-          title: "GitHub Command Quiz",
-          questions: [
-            "Which command is used to clone a repository?\n1. git clone\n2. git fork\n3. git copy\n4. git download",
-            "Which command is used to add changes to the staging area?\n1. git add\n2. git stage\n3. git commit\n4. git push",
-            "Which command is used to commit changes?\n1. git commit\n2. git add\n3. git save\n4. git push",
-            "Which command is used to push changes to a remote repository?\n1. git push\n2. git upload\n3. git send\n4. git commit",
-            "Which command is used to pull changes from a remote repository?\n1. git pull\n2. git fetch\n3. git receive\n4. git update",
-            "Which command is used to check the status of the working directory and staging area?\n1. git status\n2. git check\n3. git info\n4. git log",
-            "Which command is used to create a new branch?\n1. git branch\n2. git create-branch\n3. git new-branch\n4. git checkout",
-            "Which command is used to switch to a different branch?\n1. git checkout\n2. git switch\n3. git change-branch\n4. git branch",
-            "Which command is used to merge branches?\n1. git merge\n2. git combine\n3. git join\n4. git integrate",
-            "Which command is used to view the commit history?\n1. git log\n2. git history\n3. git commits\n4. git show"
-          ] 
-        },
         reaction: function() {
           alert(sprite_greet_miku);
         },
+        // long interaction for when you interact with miku 
         interact: function() {
-          let quiz = new Quiz(); // Create a new Quiz instance
-          quiz.initialize();
-          quiz.openPanel(sprite_data_miku.quiz);
+          const longText = `
+            What is Vocaloid?
+Vocaloid is a singing voice synthesizer software developed by Yamaha Corporation. It allows users to input melodies and lyrics, which are then "sung" by virtual singers known as Vocaloids. These voices are created using vocal samples from real singers, which are then processed and tuned to produce a synthetic, yet highly customizable, singing voice.
+
+The software was first introduced in 2004, but it wasn’t until the release of Hatsune Miku in 2007 that Vocaloid truly exploded in popularity. Since then, it has become a massive part of internet culture, inspiring music producers, animators, and artists worldwide.
+
+The History of Vocaloid
+The first version of Vocaloid, known as Vocaloid 1, debuted in 2004 with the release of two voices: Leon and Lola, English Vocaloids created by Zero-G, and Meiko, a Japanese Vocaloid produced by Crypton Future Media.
+
+However, it was Vocaloid 2 that truly revolutionized the software. In 2007, Crypton Future Media released Hatsune Miku, a blue-haired, twin-tailed idol who quickly became the face of Vocaloid. Her voice was provided by Saki Fujita, a Japanese voice actress. Miku’s immense popularity led to the release of more Vocaloids, including Kagamine Rin & Len and Megurine Luka.
+
+From there, the software continued to evolve:
+
+Vocaloid 3 (2011) introduced greater realism in voices and multiple language support.
+Vocaloid 4 (2014) added new functions like growl effects and pitch control.
+Vocaloid 5 (2018) improved usability, adding greater control over dynamics and vocal expression.
+Crypton Future Media later moved on from Vocaloid to develop Piapro Studio, which now powers Miku and other Crypton Vocaloids.
+
+Popular Vocaloids
+While Hatsune Miku is undeniably the most famous Vocaloid, there are many other beloved Vocaloids, each with their own distinct voicebanks and fan followings. Some of the most iconic ones include:
+
+1. Kagamine Rin & Len
+Twin Vocaloids (not actual twins, just mirror images of each other).
+Released in 2007 after Miku.
+Known for their dynamic range, used in everything from rock to electronic music.
+Famous songs: Meltdown, Kokoro, Butterfly on Your Right Shoulder.
+2. Megurine Luka
+Released in 2009, designed as a bilingual Vocaloid (Japanese and English).
+Has a more mature, sultry voice compared to Miku and Rin/Len.
+Famous songs: Just Be Friends, Luka Luka Night Fever, Double Lariat.
+3. Kaito & Meiko
+The first Japanese Vocaloids released before Miku.
+Kaito (male, cool and soft voice) and Meiko (female, powerful and deep voice).
+Not as popular at first, but gained a strong fanbase later on.
+Famous songs: Cantarella (Kaito), Change Me (Meiko).
+4. Gumi (Megpoid)
+Created by Internet Co., Ltd. and voiced by Megumi Nakajima.
+Has a natural, highly expressive voice.
+Famous songs: Echo, Matryoshka, Coward Montblanc.
+5. IA & ONE
+IA is based on the voice of Lia, known for her angelic singing.
+ONE is her "sister" Vocaloid with a more powerful sound.
+Famous songs: Six Trillion Years and Overnight Story, Children Record.
+Impact of Vocaloid on Music & Internet Culture
+Vocaloid has had an enormous influence on both Japanese and global music culture. Some key ways it has left its mark include:
+
+1. The Rise of Producers ("P" names)
+Vocaloid allowed independent producers to create and distribute music without needing professional singers. Many famous "Vocaloid Producers" (or "P"s) emerged, including:
+
+ryo (supercell) – Creator of World is Mine and Black Rock Shooter.
+wowaka – Known for his fast-paced, emotional songs like Rolling Girl and Unhappy Refrain.
+DECO*27 – A prolific producer famous for Ghost Rule and Ai Kotoba.
+kemu – Known for Life Reset Button and Invisible.
+2. Concerts and Live Events
+Despite being a virtual character, Hatsune Miku has held real-life concerts where she appears as a hologram. These concerts, such as Miku Expo and Magical Mirai, sell out worldwide.
+
+3. Doujin (Fan-Made) Content
+Vocaloid has fueled an enormous doujin (fan-made) culture, including:
+
+Fan art and animations
+Manga and novels based on Vocaloid songs (Kagerou Project, Mikagura School Suite).
+Remixes and covers, including human singers covering Vocaloid songs (known as "Utaite").
+Controversies and Criticisms
+Despite its success, Vocaloid isn’t without controversy:
+
+Artificial vs. Human Singing – Some criticize Vocaloid for sounding "robotic" and lacking human emotion.
+Crypton vs. Yamaha – Crypton moved away from Vocaloid software, causing some division in the community.
+Plagiarism & Copyright Issues – Some songs have been stolen or used without permission.
+Still, Vocaloid remains a beloved and constantly evolving part of music culture.
+
+The Future of Vocaloid
+As technology advances, Vocaloid voices are becoming more realistic. AI-based singing software like Synthesizer V and CeVIO AI are gaining traction, offering even more natural vocals. However, Vocaloid still has a loyal fanbase, and new characters and updates continue to keep the community alive.
+
+Will Hatsune Miku and Vocaloid stay relevant? Absolutely! As long as fans and producers keep creating music, Vocaloid will remain a global phenomenon.
+
+And that’s a long-winded dive into Vocaloid! Hope you liked it! 😆🎶
+          `;
+          alert(longText);
         }
-    }
+      };
   
 
     const sprite_src_nezuko = path + "/images/gamify/nezuko.png"; // be sure to include the path

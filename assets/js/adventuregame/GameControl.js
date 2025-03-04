@@ -1,6 +1,6 @@
 // GameControl.js
 import GameLevel from "./GameLevel.js";
-import GameLevelWater from "./GameLevelWater.js";
+import GameLevelWater from "./GameLevelFinale.js";
 import GameLevelDesert from "./GameLevelBasement.js";
 
 class GameControl {
