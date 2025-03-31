@@ -23,6 +23,7 @@ class GameLevelFinale {
         pixels: {height: 692, width: 1154},
     };
 
+
     // Player Data for Octopus
     const sprite_src_degen = path + "/images/gamify/degen.png"; // be sure to include the path
     const DEGEN_SCALE_FACTOR = 7;
@@ -80,6 +81,30 @@ class GameLevelFinale {
       { class: Player, data: sprite_data_degen },
       { class: Npc, data: sprite_data_arceus },
     ];
+
+    //button hack 
+    const BGbutton = document.createElement('button'); // create the button 
+    BGbutton.innerText = "Easter Egg";
+    BGbutton.style.position = "absolute";
+    BGbutton.style.top = "10px"; 
+    BGbutton.style.right = "10px"; // top and right makes it so the button is on the top right
+    BGbutton.style.zIndex = "1000"; // should be on top of the other things 
+    BGbutton.style.backgroundColor = "white";
+    BGbutton.style.border = "2px solid black";
+    BGbutton.style.borderRadius = "5px";
+    BGbutton.style.padding = "10px";
+    BGbutton.style.cursor = "pointer"; // button styling thingamajigs 
+
+    // event listener, when button is clicked it changes the bg 
+    const alternate_background = path + "/images/gamify/spacee.jpg"; // path to the alternate background image
+    let currentBackground = image_src_finale; // default background
+    BGbutton.addEventListener('click', () => {
+      currentBackground = currentBackground === image_src_finale ? alternate_background : image_src_finale;
+      image_data_finale.src = currentBackground;
+      console.log("Background changed to: " + currentBackground);
+    });
+
+    document.body.appendChild(BGbutton); 
   }
 }
 
