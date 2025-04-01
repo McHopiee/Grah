@@ -95,10 +95,10 @@ class Enemy extends Character {
             shard.style.position = 'absolute';
             shard.style.width = '5px';
             shard.style.height = '5px';
-            shard.style.backgroundColor = 'brown'; // Color of the shards
+            shard.style.backgroundColor = 'red'; // color of the shards
             shard.style.left =  `${x}px`;
             shard.style.top = `${this.gameEnv.top+y}px`;
-            this.canvas.parentElement.appendChild(shard); // Add shard to the canvas
+            this.canvas.parentElement.appendChild(shard); // adds shard to the canvas
 
             const angle = Math.random() * 2 * Math.PI;
             const speed = Math.random() * 5 + 2;
@@ -119,10 +119,9 @@ class Enemy extends Character {
             );
 
             setTimeout(() => {
-                shard.remove(); // Remove shard after animation
-            }, 1000);
+                shard.remove(); // removes shards after animation
+            }, 1000); // 1000 means that the animation should last one second, the delete the remaining shards and cleans up
         }
-        //this.canvas.style.opacity = 0; // Make the Bat disappear
     }
 
     /**

@@ -75,14 +75,11 @@ class Creeper extends Enemy {
 
     handleCollisionEvent() {
         //extract player object
-        var player = this.gameEnv.gameObjects.find(obj => obj instanceof Player);
+        var player = this.gameEnv.gameObjects.find(obj => obj instanceof Player); 
         //collided object is player
         if (player.id = this.collisionData.touchPoints.other.id) {
             
             console.log("Creeper collided with player!");
-
-        // Make creeper jump
-        this.jump();
 
         // Stop movement
         this.velocity.x = 0;
