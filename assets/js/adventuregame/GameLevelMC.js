@@ -4,7 +4,8 @@ import Player from './Player.js';
 import Npc from './Npc.js';
 import Quiz from './Quiz.js';
 import GameControl from './GameControl.js';
-import GameLevelMCPlat from './GameLevelMCPlat.js';
+import GameLevelFinale from './GameLevelFinale.js';
+import Creeper from './Creeper.js'; // Import the Creeper class
 
 class GameLevelMC {
   constructor(gameEnv) {
@@ -49,7 +50,7 @@ class GameLevelMC {
     };
 
 
-    // NPC data for creeper
+    // enemy data for creeper
     const sprite_src_creeper = path + "/images/gamify/creepa.png"; // be sure to include the path
     const sprite_greet_creeper = "KABOOM!!";
     const sprite_data_creeper = {
@@ -78,7 +79,7 @@ class GameLevelMC {
         direction: { x: 1, y: 1 },
 
         updatePosition: function () {
-          console.log(`Creeper position: (${this.INIT_POSITION.x}, ${this.INIT_POSITION.y})`);
+          // console.log(`Creeper position: (${this.INIT_POSITION.x}, ${this.INIT_POSITION.y})`);
           this.INIT_POSITION.x += this.direction.x * this.speed; // Update x position based on direction and speed
           this.INIT_POSITION.y += this.direction.y * this.speed; // Update y position based on direction and speed
 
@@ -99,10 +100,6 @@ class GameLevelMC {
             this.direction.y = -1; 
           }
         },
-
-        reaction: function () {
-          alert(sprite_greet_creeper); 
-        }
       };
 
       setInterval(() => {
@@ -129,7 +126,7 @@ class GameLevelMC {
       },
       interact: function() {
         let primaryGame = gameEnv.gameControl;
-        let levelArray = [GameLevelMCPlat];
+        let levelArray = [GameLevelFinale];
         let gameInGame = new GameControl(gameEnv.game, levelArray);
         primaryGame.pause();
         gameInGame.start();
@@ -144,7 +141,7 @@ class GameLevelMC {
       { class: Background, data: image_data_main },
       { class: Player, data: sprite_data_player },
       { class: Npc, data: sprite_data_villager },
-      { class: Npc, data: sprite_data_creeper },
+      { class: Creeper, data: sprite_data_creeper },
     ];
     
   }

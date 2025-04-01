@@ -1,9 +1,9 @@
 // GameControl.js
 import GameLevel from "./GameLevel.js";
-import GameLevelWater from "./GameLevelFinale.js";
-import GameLevelDesert from "./GameLevelBasement.js";
+import GameLevelFinale from "./GameLevelFinale.js";
+import GameLevelBasement from "./GameLevelBasement.js";
 import GameLevelMC from "./GameLevelMC.js";
-import GameLevelMCPlat from "./GameLevelMCPlat.js"; 
+
 
 class GameControl {
     /**
@@ -11,7 +11,7 @@ class GameControl {
      * @param {*} path - The path to the game assets
      * @param {*} levelClasses - The classes of for each game level
      */
-    constructor(path, levelClasses = [GameLevelDesert, GameLevelWater, GameLevelMC, GameLevelMCPlat]) {
+    constructor(path, levelClasses = [GameLevelBasement, GameLevelMC, GameLevelFinale]) {
         // GameControl properties
         this.path = path;
         this.levelClasses = levelClasses;
@@ -35,16 +35,57 @@ class GameControl {
     }
 
     /**
-     * Transitions to the next level in the level by
-     * 1. Creating a new GameLevel instance
-     * 2. Creating the level using the GameLevelClass
-     * 3. Starting the game loop
-     */ 
+     * Transition to the next level with a fade-out and fade-in effect
+     */
     transitionToLevel() {
-        const GameLevelClass = this.levelClasses[this.currentLevelIndex];
-        this.currentLevel = new GameLevel(this);
-        this.currentLevel.create(GameLevelClass);
-        this.gameLoop();
+        // Create the fade overlay
+        const fadeOverlay = document.createElement('div');
+        fadeOverlay.style.position = 'fixed';
+        fadeOverlay.style.top = '0';
+        fadeOverlay.style.left = '0';
+        fadeOverlay.style.width = '100%';
+        fadeOverlay.style.height = '100%';
+        fadeOverlay.style.backgroundColor = 'black';
+        fadeOverlay.style.opacity = '0';
+        fadeOverlay.style.transition = 'opacity 1s ease-in-out';
+        fadeOverlay.style.zIndex = '1000'; // Ensure it appears above everything else
+
+        // Create the "Loading..." message
+        const loadingMessage = document.createElement('div');
+        loadingMessage.innerText = 'Loading...';
+        loadingMessage.style.position = 'absolute';
+        loadingMessage.style.top = '50%';
+        loadingMessage.style.left = '50%';
+        loadingMessage.style.transform = 'translate(-50%, -50%)';
+        loadingMessage.style.color = 'white';
+        loadingMessage.style.fontSize = '2rem';
+        loadingMessage.style.fontFamily = 'Arial, sans-serif';
+        fadeOverlay.appendChild(loadingMessage);
+
+        // Add the overlay to the document
+        document.body.appendChild(fadeOverlay);
+
+        // Fade to black
+        requestAnimationFrame(() => {
+            fadeOverlay.style.opacity = '1';
+        });
+
+        setTimeout(() => {
+            // Switch levels when the screen is black
+            const GameLevelClass = this.levelClasses[this.currentLevelIndex];
+            this.currentLevel = new GameLevel(this);
+            this.currentLevel.create(GameLevelClass);
+
+            // Keep the "Loading..." message visible for a bit longer
+            setTimeout(() => {
+                // Fade back in
+                fadeOverlay.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(fadeOverlay), 1000);
+
+                // Start game loop after transition
+                this.gameLoop();
+            }, 1000); // Additional delay for the "Loading..." message
+        }, 1000); // Wait for fade-out duration
     }
 
     /**
@@ -139,7 +180,7 @@ class GameControl {
     // Helper method to hide the current canvas state in the game container
     hideCanvasState() {
         const gameContainer = document.getElementById('gameContainer');
-        const canvasElements = gameContainer.querySelectorAll('canvas');
+        const canvasElements = gameContainer.querySelectorAll('canvas');4
         canvasElements.forEach(canvas => {
             if (canvas.id !== 'gameCanvas') {
                 canvas.style.display = 'none';
@@ -185,6 +226,27 @@ class GameControl {
         this.addExitKeyListener();
         this.showCanvasState();
         this.gameLoop();
+    }
+
+    /**
+     * Move to the next level
+     */
+    nextLevel() {
+        this.currentLevelIndex = (this.currentLevelIndex + 1) % this.levelClasses.length;
+        this.transitionToLevel();
+    }
+
+    /**
+     * Restart the current level.
+     */
+    restartLevel() {
+        console.log("Restarting the current level...");
+        if (this.currentLevel) {
+            this.currentLevel.destroy(); // Clean up the current level
+        }
+        const CurrentLevelClass = this.levelClasses[this.currentLevelIndex];
+        this.currentLevel = new GameLevel(this);
+        this.currentLevel.create(CurrentLevelClass);
     }
 }
 
