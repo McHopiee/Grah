@@ -106,6 +106,13 @@ class GameControl {
         }
         this.currentLevel.update();
         this.handleInLevelLogic();
+         
+        // Check if the level is set to restart
+        // If the level is set to restart, call the restartLevel method
+        if (this.currentLevel.restart) {
+            this.restartLevel();
+            return;
+        }
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
@@ -236,18 +243,14 @@ class GameControl {
         this.transitionToLevel();
     }
 
-    /**
-     * Restart the current level.
-     */
     restartLevel() {
-        console.log("Restarting the current level...");
-        if (this.currentLevel) {
-            this.currentLevel.destroy(); // Clean up the current level
+        if (this.currentLevel) { //checks if theres a current level, if so, then..
+            this.currentLevel.destroy(); //destroys the current level 
         }
-        const CurrentLevelClass = this.levelClasses[this.currentLevelIndex];
-        this.currentLevel = new GameLevel(this);
-        this.currentLevel.create(CurrentLevelClass);
+        this.gameLoopCounter = 0; //resets the game loops counter 
+        this.transitionToLevel(); //transitions to the same level its currently in 
     }
 }
+
 
 export default GameControl;
