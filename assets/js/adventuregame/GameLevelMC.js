@@ -77,7 +77,7 @@ class GameLevelMC {
         },
         
         // speed and direction, the speed is currently set to five and x:1 means its moving right and y:1 means its moving down. these values can be turned negative to mean the opposite
-        speed : 5,
+        speed : 20,
         direction: { x: 1, y: 1 },
 
         // moves the object by adding speed multiplied by direction to INIT_POSITION: if moving right, x increases and if moving down, y increases
@@ -130,7 +130,7 @@ class GameLevelMC {
       },
       interact: function() {
         let primaryGame = gameEnv.gameControl;
-        let levelArray = [GameLevelFinale];
+        let levelArray = [GameLevelPlatform];
         let gameInGame = new GameControl(gameEnv.game, levelArray);
         primaryGame.pause();
         gameInGame.start();
