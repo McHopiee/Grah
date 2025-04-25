@@ -77,7 +77,7 @@ class GameLevelMC {
         },
         
         // speed and direction, the speed is currently set to five and x:1 means its moving right and y:1 means its moving down. these values can be turned negative to mean the opposite
-        speed : 20,
+        speed : 10,
         direction: { x: 1, y: 1 },
 
         // moves the object by adding speed multiplied by direction to INIT_POSITION: if moving right, x increases and if moving down, y increases
@@ -102,6 +102,12 @@ class GameLevelMC {
           if (this.INIT_POSITION.y >= this.walkingArea.yMax) {
             this.INIT_POSITION.y = this.walkingArea.yMax;
             this.direction.y = -1; 
+          }
+
+          //flip the sprite based on direction 
+          const spriteElement = document.getElementById(this.id);
+          if (spriteElement) { 
+            spriteElement.style.transform = this.direction.x === -1 ? "scaleX(-1)" : "scaleX(1)";
           }
         },
       };
