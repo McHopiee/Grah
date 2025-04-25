@@ -9,153 +9,158 @@ import Creeper from './Creeper.js'; // Import the Creeper class
 
 class GameLevelMC {
   constructor(gameEnv) {
-    // Values dependent on this.gameEnv.create()
     let width = gameEnv.innerWidth;
     let height = gameEnv.innerHeight;
     let path = gameEnv.path;
 
-    // Background data
-    const image_src_main = path + "/images/gamify/maine_RPG.png"; // be sure to include the path
+    const image_src_main = path + "/images/gamify/maine_RPG.png";
     const image_data_main = {
-        name: 'main',
-        greeting: "Welcome to the main hub of Overwold.",
-        src: image_src_main,
-        pixels: {height: 320, width: 480}
+      name: 'main',
+      greeting: "Welcome to the main hub of Overwold.",
+      src: image_src_main,
+      pixels: { height: 320, width: 480 }
     };
 
-
-    // Player data for Player
-    const sprite_src_player = path + "/images/gamify/steve.png"; // be sure to include the path
+    const sprite_src_player = path + "/images/gamify/steve.png";
     const PLAYER_SCALE_FACTOR = 5;
     const sprite_data_player = {
-        id: 'Player',
-        greeting: "I am Steve.",
-        src: sprite_src_player,
-        SCALE_FACTOR: PLAYER_SCALE_FACTOR,
-        STEP_FACTOR: 800,
-        ANIMATION_RATE: 50,
-        INIT_POSITION: { x: 0, y: height - (height/PLAYER_SCALE_FACTOR) }, 
-        pixels: {height: 1500, width: 600},
-        orientation: {rows: 4, columns: 3 },
-        down: {row: 0, start: 0, columns: 3 },
-        downRight: {row: 2, start: 0, columns: 3, rotate: Math.PI/16 },
-        downLeft: {row: 1, start: 0, columns: 3, rotate: -Math.PI/16 },
-        left: {row: 1, start: 0, columns: 3 },
-        right: {row: 2, start: 0, columns: 3 },
-        up: {row: 3, start: 0, columns: 3 },
-        upLeft: {row: 1, start: 0, columns: 3, rotate: Math.PI/16 },
-        upRight: {row: 2, start: 0, columns: 3, rotate: -Math.PI/16 },
-        hitbox: { widthPercentage: 0.45, heightPercentage: 0.2 },
-        keypress: { up: 87, left: 65, down: 83, right: 68 } // W, A, S, D
+      id: 'Player',
+      greeting: "I am Steve.",
+      src: sprite_src_player,
+      SCALE_FACTOR: PLAYER_SCALE_FACTOR,
+      STEP_FACTOR: 800,
+      ANIMATION_RATE: 50,
+      INIT_POSITION: { x: 0, y: height - (height / PLAYER_SCALE_FACTOR) },
+      pixels: { height: 1500, width: 600 },
+      orientation: { rows: 4, columns: 3 },
+      down: { row: 0, start: 0, columns: 3 },
+      downRight: { row: 2, start: 0, columns: 3, rotate: Math.PI / 16 },
+      downLeft: { row: 1, start: 0, columns: 3, rotate: -Math.PI / 16 },
+      left: { row: 1, start: 0, columns: 3 },
+      right: { row: 2, start: 0, columns: 3 },
+      up: { row: 3, start: 0, columns: 3 },
+      upLeft: { row: 1, start: 0, columns: 3, rotate: Math.PI / 16 },
+      upRight: { row: 2, start: 0, columns: 3, rotate: -Math.PI / 16 },
+      hitbox: { widthPercentage: 0.45, heightPercentage: 0.2 },
+      keypress: { up: 87, left: 65, down: 83, right: 68 }
     };
 
-
-    // enemy data for creeper
-    const sprite_src_creeper = path + "/images/gamify/creepa.png"; // be sure to include the path
+    const sprite_src_creeper = path + "/images/gamify/creepa.png";
     const sprite_greet_creeper = "KABOOM!!";
     const sprite_data_creeper = {
-        id: 'Creeper',
-        greeting: sprite_greet_creeper,
-        src: sprite_src_creeper,
-        SCALE_FACTOR: 4,  // Adjust this based on your scaling needs
-        ANIMATION_RATE: 25,
-        pixels: {height: 1200, width: 1600},
-        INIT_POSITION: { x: 100, y: 100 },
-        orientation: {rows: 1, columns: 2 },
-        down: {row: 0, start: 0, columns: 2 },
-        right: {row: 0, start: 0, columns: 2 },
-        left: {row: 0, start: 0, columns: 2 },
-        up: {row: 0, start: 0, columns: 2 },  // This is the stationary npc, down is default 
-        hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
+      id: 'Creeper',
+      greeting: sprite_greet_creeper,
+      src: sprite_src_creeper,
+      SCALE_FACTOR: 4,
+      ANIMATION_RATE: 25,
+      pixels: { height: 1200, width: 1600 },
+      INIT_POSITION: { x: 100, y: 100 },
+      orientation: { rows: 1, columns: 2 },
+      down: { row: 0, start: 0, columns: 2 },
+      right: { row: 0, start: 0, columns: 2 },
+      left: { row: 0, start: 0, columns: 2 },
+      up: { row: 0, start: 0, columns: 2 },
+      hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
+      walkingArea: {
+        xMin: width / 10,
+        xMax: (width * 5 / 7),
+        yMin: height / 4,
+        yMax: (height * 8 / 15)
+      },
+      speed: 10,
+      direction: { x: 1, y: 1 },
+      updatePosition: function () {
+        this.INIT_POSITION.x += this.direction.x * this.speed;
+        this.INIT_POSITION.y += this.direction.y * this.speed;
 
-        //walking area creates the box where the creeper can walk in 
-        walkingArea: {
-          xMin: width / 10, //left boundary
-          xMax: (width * 5 / 7), //right boundary 
-          yMin: height / 4, //top boundary 
-          yMax: (height * 8 / 15) //bottom boundary
-        },
-        
-        // speed and direction, the speed is currently set to five and x:1 means its moving right and y:1 means its moving down. these values can be turned negative to mean the opposite
-        speed : 10,
-        direction: { x: 1, y: 1 },
+        if (this.INIT_POSITION.x <= this.walkingArea.xMin) {
+          this.INIT_POSITION.x = this.walkingArea.xMin;
+          this.direction.x = 1;
+        }
+        if (this.INIT_POSITION.x >= this.walkingArea.xMax) {
+          this.INIT_POSITION.x = this.walkingArea.xMax;
+          this.direction.x = -1;
+        }
+        if (this.INIT_POSITION.y <= this.walkingArea.yMin) {
+          this.INIT_POSITION.y = this.walkingArea.yMin;
+          this.direction.y = 1;
+        }
+        if (this.INIT_POSITION.y >= this.walkingArea.yMax) {
+          this.INIT_POSITION.y = this.walkingArea.yMax;
+          this.direction.y = -1;
+        }
 
-        // moves the object by adding speed multiplied by direction to INIT_POSITION: if moving right, x increases and if moving down, y increases
-        updatePosition: function () {
-          // console.log(`Creeper position: (${this.INIT_POSITION.x}, ${this.INIT_POSITION.y})`);
-          this.INIT_POSITION.x += this.direction.x * this.speed; // Update x position based on direction and speed
-          this.INIT_POSITION.y += this.direction.y * this.speed; // Update y position based on direction and speed
+        const spriteElement = document.getElementById(this.id);
+        if (spriteElement) {
+          spriteElement.style.transform = this.direction.x === -1 ? "scaleX(-1)" : "scaleX(1)";
+          spriteElement.style.left = this.INIT_POSITION.x + 'px';
+          spriteElement.style.top = this.INIT_POSITION.y + 'px';
+        }
+      },
+      isAnimating: false,
+      playAnimation: function () {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
 
-          //boundary checks, this makes it so the creeper bounces off walls when it's collision/hit box collides with the boundaries of the set walking area
-          if (this.INIT_POSITION.x <= this.walkingArea.xMin) {
-            this.INIT_POSITION.x = this.walkingArea.xMin;
-            this.direction.x = 1; 
-          }
-          if (this.INIT_POSITION.x >= this.walkingArea.xMax) {
-            this.INIT_POSITION.x = this.walkingArea.xMax;
-            this.direction.x = -1; 
-          }
-          if (this.INIT_POSITION.y <= this.walkingArea.yMin) {
-            this.INIT_POSITION.y = this.walkingArea.yMin;
-            this.direction.y = 1; 
-          }
-          if (this.INIT_POSITION.y >= this.walkingArea.yMax) {
-            this.INIT_POSITION.y = this.walkingArea.yMax;
-            this.direction.y = -1; 
-          }
+        const spriteElement = document.getElementById(this.id);
+        if (!spriteElement) return;
 
-          //flip the sprite based on direction 
-          const spriteElement = document.getElementById(this.id);
-          if (spriteElement) { 
-            spriteElement.style.transform = this.direction.x === -1 ? "scaleX(-1)" : "scaleX(1)";
-          }
-        },
-      };
+        spriteElement.style.transition = 'filter 1s ease-in-out';
+        spriteElement.style.filter = 'brightness(3) saturate(0)';
 
-      setInterval(() => {
-        sprite_data_creeper.updatePosition(); 
-      }, 100); // update position every 100 milliseconds 
+        setTimeout(() => {
+          spriteElement.style.filter = 'none';
+          setTimeout(() => {
+            spriteElement.style.transition = '';
+            this.isAnimating = false;
+          }, 1000);
+        }, 1000);
+      }
+    };
 
+    setInterval(() => {
+      sprite_data_creeper.updatePosition();
+    }, 100);
 
-    // NPC Data for villager
-    const sprite_src_villager = path + "/images/gamify/villager.png"; // be sure to include the path
+    setInterval(() => {
+      sprite_data_creeper.playAnimation();
+    }, 5000);
+
+    const sprite_src_villager = path + "/images/gamify/villager.png";
     const sprite_greet_villager = "Aur aur aur";
     const sprite_data_villager = {
       id: 'Villager',
       greeting: sprite_greet_villager,
       src: sprite_src_villager,
-      SCALE_FACTOR: 6,  // Adjust this based on your scaling needs
+      SCALE_FACTOR: 6,
       ANIMATION_RATE: 100,
-      pixels: {width: 700, height: 1400},
-      INIT_POSITION: { x: (width * 10/11 ), y: (height * 1/40)}, // Adjusted position
-      orientation: {rows: 1, columns: 1 },
-      down: {row: 0, start: 0, columns: 1 },  // This is the stationary npc, down is default 
+      pixels: { width: 700, height: 1400 },
+      INIT_POSITION: { x: (width * 10 / 11), y: (height * 1 / 40) },
+      orientation: { rows: 1, columns: 1 },
+      down: { row: 0, start: 0, columns: 1 },
       hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
-      reaction: function() {
+      reaction: function () {
         alert(sprite_greet_villager);
       },
-      interact: function() {
+      interact: function () {
         let primaryGame = gameEnv.gameControl;
         let levelArray = [GameLevelPlatform];
         let gameInGame = new GameControl(gameEnv.game, levelArray);
         primaryGame.pause();
         gameInGame.start();
-        gameInGame.gameOver = function() {
+        gameInGame.gameOver = function () {
           primaryGame.resume();
-        }
+        };
       }
     };
 
-    // List of objects defnitions for this level
     this.classes = [
       { class: Background, data: image_data_main },
       { class: Player, data: sprite_data_player },
       { class: Npc, data: sprite_data_villager },
       { class: Creeper, data: sprite_data_creeper },
     ];
-    
   }
-
 }
 
 export default GameLevelMC;
