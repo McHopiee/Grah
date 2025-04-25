@@ -1,0 +1,25 @@
+# enemy hacks infographic 
+Title: "Enemy Animation and Enemy Movement Hacks"
+Description: "Hacks for lessons one and two on enemies."
+Topics:
+  - title: "Hack 1: Creating your own moving enemy"
+    image: "/gamify/enemycrab.png"
+    link: "/gamify/enemycrab"
+    alt: "enemycrab"
+    keyPoints:
+      - "Moving enemy inside a set boundary box"
+      - "Figure out how to transform the boundary box to your liking"
+      - "Using the enemy's hit box, create a way for it to bounce off the 'walls'"
+    subtitle: "Enemy Movement Hack"
+    description: "For hack one, we would like you to create a box that your enemy can move in. Configure the size of the boundary box, then create a way for the enemy to bounce off of the walls of that box. For example, that one TV idle screen that plays."
+  - title: "Hack 2: Creating enemy animation"
+    image: "/gamify/exploding.jpg"
+    link: "/gamify/exploding"
+    alt: "exploding"
+    keyPoints:
+      - "A way to play and stop the animation"
+      - "Creating the animation"
+      - "Ensure that the enemy is still moving even after animation"
+      - "Optional Extra Credit: Sound"
+    subtitle: "Enemy Animation Hack"
+    description: "AFTER completing the first hack, your next step is then creating an animation for your enemy. You can be creative with this one. You can have particles around you enemy as it walks, it can play an animation after a few seconds, or it can pause to play an animation then continue moving afterwards. For extra credit, find a way to include sound when your animation plays!"
