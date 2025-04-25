@@ -69,6 +69,9 @@ class GameLevelMC {
       },
       speed: 10,
       direction: { x: 1, y: 1 },
+
+      sound: new Audio(path + "/sounds/creeper.mp3"),
+
       updatePosition: function () {
         this.INIT_POSITION.x += this.direction.x * this.speed;
         this.INIT_POSITION.y += this.direction.y * this.speed;
@@ -104,6 +107,8 @@ class GameLevelMC {
 
         const spriteElement = document.getElementById(this.id);
         if (!spriteElement) return;
+
+        this.sound.play();
 
         spriteElement.style.transition = 'filter 1s ease-in-out';
         spriteElement.style.filter = 'brightness(3) saturate(0)';
