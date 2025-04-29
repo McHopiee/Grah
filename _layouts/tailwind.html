@@ -7,7 +7,8 @@ layout: base
 
 {%- if page.infoGraph -%}
   {% assign info = site.data[page.infoGraph] %}
-  {%- include tailwind/infograph.html -%}
+  {% assign style = page.graphStyle | default: 'infograph' %}
+  {%- include tailwind/{{ style }}.html data=info -%}
 {%- endif -%}
 
 <script>

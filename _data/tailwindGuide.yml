@@ -1,0 +1,75 @@
+Title: Tailwind Layout Guide
+Description: "How to create different layouts with Tailwind, what each component does. For this example, we will be using the very layout used for this guide!"
+Topics:
+  - title: Structure
+    subtitle: "Basic layout structure"
+    code: |
+      {% assign data = site.data[page.infoGraph] %}
+      <div class="container mx-auto p-6">
+    description: "{% assign data = ... %}: This is Liquid templating syntax. It pulls in structured data from a YAML/JSON file referenced in the front matter of the current page (page.infoGraph). That way, you can build reusable layouts and just swap out the data source."
+  - title: Container and Padding 
+    subtitle: "Creating the container"
+    code: |
+      <div class="container mx-auto p-6">
+    description: |
+      <span class="text-amber-400 font-semibold">Container:</span> This centers and sets a max width.
+
+      <span class="text-amber-400 font-semibold">mx-auto:</span> Centers the container horizontally.
+
+      <span class="text-amber-400 font-semibold">p-6:</span> Adds padding to all sides.
+    images:
+      - src: "/container.png"
+        alt: "Container example"
+  - title: Header 
+    subtitle: "Creating the header"
+    code: |
+      <div class="text-center mb-10">
+        <h1 class="text-5xl font-bold mb-2 font-serif">{{ data.Title }}</h1>
+        <p class="text-lg text-gray-600 font-sans">{{ data.Description }}</p>
+      </div>
+    description: |
+      <span class="text-amber-400 font-semibold">Text Container (class=):</span>
+        text-center centers the text horizontally, mb-10 adds a bottom margin (2.5rem).
+
+      <span class="text-amber-400 font-semibold">Title (h1 class):</span>
+        text-5xl sets the font size, font-bold makes it bold, mb-2 adds a bottom margin (0.5rem), font-serif sets the font family to serif.
+
+      <span class="text-amber-400 font-semibold">Description (p class):</span>
+        text-lg sets the font size, text-gray-600 sets the text color to a gray shade, font-sans sets the font family to sans-serif.
+    images: 
+      - src: "/header.png"
+        alt: "Header example"
+      - src: "/headerdesc.png"
+        alt: "Header description example"
+  - title: Explanation Cards
+    code: |
+      <div class="space-y-8">
+        {% for topic in data.Topics %}
+          <div class="flex flex-col bg-zinc-800 text-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-lg w-full">
+    description: |
+      <span class="text-amber-400 font-semibold">space-y-8:</span> Adds vertical spacing of 8 units between each card (topic).
+
+      <span class="text-amber-400 font-semibold">{% for topic in data.Topics %}:</span> A loop that iterates through each topic in the data.Topics array. This is where each card gets displayed.
+
+      Each card had multiple parts to it, so let's break it down:
+      
+      <span class="text-cyan-400 font-semibold">flex flex-col:</span> This makes the card a flex container and arranges it into a column.
+
+      <span class="text-cyan-400 font-semibold">bg-zinc-800:</span> Sets the default background color of the card to dark gray. (How to set colors will be explained later)
+
+      <span class="text-cyan-400 font-semibold">text-white:</span> Makes text color white.
+
+      <span class="text-cyan-400 font-semibold">dark:bg-zinc-900:</span> Sets the background color to a darker gray when in dark mode.
+
+      <span class="text-cyan-400 font-semibold">rounded-2xl:</span> Rounds the corners of the card instead of having them sharp. Keep in mind many of these details are optional, and you can have fun customizing your own Tailwind layout!
+
+      <span class="text-cyan-400 font-semibold">overflow-hidden:</span> Prevents content from overflowing the card's boundaries.
+
+      <span class="text-cyan-400 font-semibold">shadow-lg:</span> Adds a large shadow effect to the card.
+
+      <span class="text-cyan-400 font-semibold">w-full:</span> Sets the width of the card to 100% of its parent container.
+    images:
+      - src: "/explaincard.png"
+        alt: "Card example"
+
+      

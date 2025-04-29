@@ -1,0 +1,52 @@
+<div>
+    {% assign data = site.data[page.infoGraph] %}
+    <div class="container mx-auto p-6">
+  
+      <!-- Header Section -->
+      <div class="text-center mb-10">
+        <h1 class="text-5xl font-bold mb-2 font-serif">{{ data.Title }}</h1>
+        <p class="text-lg text-gray-600 font-sans">{{ data.Description }}</p>
+      </div>
+  
+      <!-- Explanation Cards -->
+      <div class="space-y-8">
+        {% for topic in data.Topics %}
+          <!-- Card -->
+          <div class="flex flex-col bg-zinc-800 text-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-lg w-full">
+  
+            <!-- Content Section -->
+            <div class="flex-1 p-6 mb-6"> <!-- Added margin-bottom here -->
+              <!-- Title -->
+              <h2 class="text-3xl font-bold mb-4 font-serif">{{ topic.title }}</h2>
+  
+              <!-- Code Snippet -->
+              {% if topic.code %}
+                <div class="relative bg-zinc-950 text-gray-900 font-mono text-sm p-4 rounded-md mb-4 overflow-x-auto">
+                  <pre><code>{{ topic.code | escape }}</code></pre>
+                </div>
+              {% endif %}
+  
+              <!-- Description with line breaks preserved -->
+              <p class="text-base font-sans whitespace-pre-line">{{ topic.description }}</p>
+            </div>
+  
+            <!-- Optional Image Section (Placed at the bottom) -->
+            {% if topic.images %}
+              <div class="w-full flex justify-center mt-auto"> <!-- Ensure the images are at the bottom -->
+                <div class="flex justify-center space-x-4"> <!-- Ensure images stay side by side -->
+                  {% for image in topic.images %}
+                    <div class="mb-4">
+                      <img src="{{ site.baseurl }}/images/tailwinds{{ image.src }}" alt="{{ image.alt | default: 'Illustration' }}" class="w-auto h-auto object-cover">
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+  
+          </div>
+        {% endfor %}
+      </div>
+  
+    </div>
+  </div>
+  
