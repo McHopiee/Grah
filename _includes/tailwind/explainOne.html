@@ -1,0 +1,75 @@
+<div>
+    {% assign data = include.data %}
+    <div class="container mx-auto p-6">
+  
+      <!-- Header Section -->
+      {% if data.Title or data.Description %}
+        <div class="text-center mb-10">
+          {% if data.Title %}
+            <h1 class="text-5xl font-bold mb-2 font-serif">{{ data.Title }}</h1>
+          {% endif %}
+          {% if data.Description %}
+            <p class="text-lg text-gray-600 font-sans">{{ data.Description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+  
+      <!-- Explanation Cards -->
+      <div class="space-y-8">
+        {% for topic in data.Topics %}
+          <div class="flex flex-col bg-zinc-800 text-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-lg w-full">
+  
+            <!-- Code and Explanation Section -->
+            <div class="flex flex-col md:flex-row md:items-center p-6 space-y-4 md:space-y-0 md:space-x-6">
+  
+              <!-- Left Side (Code Block) -->
+              {% if topic.code %}
+                <div class="md:w-1/2 w-full flex justify-center md:justify-end">
+                  <div class="bg-zinc-950 text-gray-100 font-mono text-sm p-4 rounded-md max-w-full" style="white-space: pre-wrap; word-break: break-word;">
+                    <pre><code>{{ topic.code | escape }}</code></pre>
+                  </div>
+                </div>
+              {% endif %}
+  
+              <!-- Right Side (Explanation) -->
+              {% if topic.description %}
+                <div class="md:w-1/2 w-full">
+                  {% if topic.title %}
+                    <h2 class="text-3xl font-bold mb-4 font-serif">{{ topic.title }}</h2>
+                  {% endif %}
+                  <p class="text-base font-sans whitespace-pre-line">{{ topic.description }}</p>
+                </div>
+              {% endif %}
+  
+            </div>
+  
+            <!-- Optional Image Section -->
+            {% if topic.images %}
+              <div class="w-full flex justify-center mt-auto">
+                <div class="flex justify-center space-x-4">
+                  {% for image in topic.images %}
+                    <div class="mb-4">
+                      <img src="{{ site.baseurl }}/images/{{ image.src }}" alt="{{ image.alt | default: 'Illustration' }}" class="w-auto h-auto object-cover">
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+  
+            <!-- Optional Video Section -->
+            {% if topic.video %}
+              <div class="p-4">
+                <video controls class="w-full rounded-md shadow-md">
+                  <source src="{{ site.baseurl }}/videos/{{ topic.video }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            {% endif %}
+  
+          </div>
+        {% endfor %}
+      </div>
+  
+    </div>
+  </div>
+  

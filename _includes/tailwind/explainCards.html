@@ -1,0 +1,45 @@
+<div>
+    {% assign data = include.data %}
+    <div class="container mx-auto p-6">
+  
+      <!-- Optional Header Section -->
+      {% if data.Title or data.Description %}
+        <div class="text-center mb-10">
+          {% if data.Title %}
+            <h1 class="text-5xl font-bold mb-2 font-serif text-white">{{ data.Title }}</h1>
+          {% endif %}
+          {% if data.Description %}
+            <p class="text-lg text-gray-400 font-sans">{{ data.Description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+  
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for topic in data.Topics %}
+          <div class="bg-zinc-800 text-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-lg p-6 flex flex-col">
+  
+            <!-- Optional Code Snippet -->
+            {% if topic.code %}
+              <div class="bg-zinc-950 text-gray-100 font-mono text-sm p-4 rounded-md mb-4 overflow-x-auto" style="white-space: pre-wrap; word-break: break-word;">
+                <pre><code>{{ topic.code | escape }}</code></pre>
+              </div>
+            {% endif %}
+  
+            <!-- Optional Title -->
+            {% if topic.title %}
+              <h3 class="text-lg font-semibold font-serif mb-2">{{ topic.title }}</h3>
+            {% endif %}
+  
+            <!-- Optional Description -->
+            {% if topic.description %}
+              <p class="text-base font-sans whitespace-pre-line text-gray-300">{{ topic.description }}</p>
+            {% endif %}
+  
+          </div>
+        {% endfor %}
+      </div>
+  
+    </div>
+  </div>
+  
