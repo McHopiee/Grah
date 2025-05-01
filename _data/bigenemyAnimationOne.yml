@@ -1,0 +1,26 @@
+Title: <span class="text-red-700 font-bold">Enemy Animation</span>
+Description: Now that we have the enemy moving around, we can add some animation to it. For our animation, we made the Creeper light up ever so often as it bounces around the screen. Lighting up is something the Creeper actually does in Minecraft!
+Topics: 
+  - title: Checking, Then Running. 
+    code: |
+      isAnimating: false,
+        playAnimation: function () {
+          if (this.isAnimating) return;
+          this.isAnimating = true;
+
+          const spriteElement = document.getElementById(this.id);
+          if (!spriteElement) return;
+    description: |
+      This code ensures that the animation only runs if it's not already in progress.
+
+      <span class="text-red-500 font-semibold">isAnimating: false</span> Tracks whether an animation is currently playing.
+
+      <span class="text-red-500 font-semibold">if (this.isAnimating) return;</span> Checks if an animation is already running. If so, it exits the function early to avoid restarting or overlapping the animation.
+
+      <span class="text-red-500 font-semibold">this.isAnimating = true;</span> If no animation is running, this sets it to true to indicate that an animation is now active.
+
+      <span class="text-red-500 font-semibold">const spriteElement = document.getElementById(this.id);</span> Attempts to get the HTML element associated with this object’s `id`.
+
+      <span class="text-red-500 font-semibold">if (!spriteElement) return;</span> If the element doesn't exist, it exits the function to prevent errors.
+
+      This pattern is useful for managing animations safely and avoiding unintended behavior such as overlapping effects or glitches.

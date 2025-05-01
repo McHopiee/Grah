@@ -1,0 +1,28 @@
+Title: Continuing the Animation
+Topics: 
+  - title: After the Start of the Animation 
+    code: |
+      setTimeout(() => {
+          spriteElement.style.filter = 'none';
+          setTimeout(() => {
+            spriteElement.style.transition = '';
+            this.isAnimating = false;
+          }, 1000);
+        }, 1000);
+    description: |
+      This code resets the visual effect and animation state after it finishes, ensuring the animation can be triggered again later.
+
+      <span class="text-red-500 font-semibold">setTimeout(() => { spriteElement.style.filter = 'none'; }, 1000);</span>  
+      This waits 1 second, then removes the filter effect. The sprite to its normal appearance.
+
+      <span class="text-red-500 font-semibold">setTimeout(() => { spriteElement.style.transition = ''; this.isAnimating = false; }, 1000);</span>  
+      A second timeout inside the first one waits another 1 second to clear the transition styling and reset `isAnimating` to `false`, allowing the animation to be triggered again later
+  - title: Animation Loop
+    code: |
+      setInterval(() => {
+      sprite_data_creeper.playAnimation();
+      }, 5000);
+    description: |
+      This code sets up a loop that triggers the animation every 2 seconds. The `setInterval` function repeatedly calls `this.playAnimation()` at the specified interval, creating a continuous animation effect.
+
+      The downside of having the setInterval() functions is that it creates a second loop other than the running loop of the game. It would be better if we found a way to have the same effect that we have now, but inside of the existing loop. We are still working on a solution.

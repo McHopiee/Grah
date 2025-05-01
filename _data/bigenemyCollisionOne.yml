@@ -1,0 +1,7 @@
+Title: <span class="text-blue-800 font-bold">Enemy Collision</span>
+Description: Great! We have a moving Creeper complete with it's own 'idle' animation. But since it's an enemy, we need to make some sort of consequence that happens when the player bumps into it. That's exactly what we did. 
+Topics: 
+  - title: Creating The Required Files
+    subtitle: "So, for our enemy, we created a new file named <span class=font-bold'>enemy.js</span>. The file extends the existing NPC.js file, and adds on the new properties of being an enemy."
+    description: |
+      

@@ -1,0 +1,50 @@
+Title: Coding the Boundaries
+Description: Now that we have created where the boundaries are, we need to code the boundaries so that they actually do something. (Note; the right and left boundaries will be explained but only the code for the rest will be provided since they are the same code but with different values.)
+Topics: 
+  - title: "Left Wall"
+    code: |
+      if (this.INIT_POSITION.x <= this.walkingArea.xMin) {
+          this.INIT_POSITION.x = this.walkingArea.xMin;
+          this.direction.x = 1;
+        }
+    description: |
+      This code handles what happens when the enemy hits the **left boundary** of the walking area.
+
+      <span class="text-amber-400 font-semibold">if (this.INIT_POSITION.x <= this.walkingArea.xMin)</span> Checks if the enemy has moved past or touched the left edge of the allowed area.
+      
+      <span class="text-amber-400 font-semibold">this.INIT_POSITION.x = this.walkingArea.xMin;</span> Snaps the enemy’s position back to the exact edge to avoid going outside the area.
+      
+      <span class="text-amber-400 font-semibold">this.direction.x = 1;</span> Reverses the enemy’s horizontal direction to the right, simulating a bounce off the wall.
+
+      This ensures the enemy stays within bounds and responds visually to hitting the left wall.
+
+  - title: "Right Wall"
+    code: |
+      if (this.INIT_POSITION.x >= this.walkingArea.xMax) {
+          this.INIT_POSITION.x = this.walkingArea.xMax;
+          this.direction.x = -1;
+        }
+    description: |
+      This code handles collisions with the **right boundary** of the walking area.
+
+      <span class="text-amber-400 font-semibold">if (this.INIT_POSITION.x >= this.walkingArea.xMax)</span> checks whether the enemy has reached or gone past the right edge of the allowed space.
+
+      <span class="text-amber-400 font-semibold">this.INIT_POSITION.x = this.walkingArea.xMax;</span> resets the enemy’s position to exactly at the right edge, preventing it from moving out of bounds.
+
+      <span class="text-amber-400 font-semibold">this.direction.x = -1;</span> reverses the enemy’s horizontal direction to the left, making it "bounce" off the right wall.
+
+      This logic keeps the enemy confined within the walking area and gives a realistic back-and-forth movement.
+
+  - title: "Top Wall"
+    code: |
+      if (this.INIT_POSITION.y <= this.walkingArea.yMin) {
+          this.INIT_POSITION.y = this.walkingArea.yMin;
+          this.direction.y = 1;
+        }
+
+  - title: "Bottom Wall"
+    code: |
+      if (this.INIT_POSITION.y >= this.walkingArea.yMax) {
+          this.INIT_POSITION.y = this.walkingArea.yMax;
+          this.direction.y = -1;
+        }

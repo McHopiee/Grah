@@ -1,0 +1,16 @@
+Title: Coding the Animation 
+Topics: 
+  - title: Animation Function
+    description: |
+      This code applies a visual animation effect to a sprite by changing its CSS styles with a smooth transition.
+
+      <span class="text-red-500 font-semibold">spriteElement.style.transition = 'filter 1s ease-in-out';</span>  
+      This line sets a transition so that any changes to the `filter` property will happen gradually over 1 second, using an "ease-in-out" timing function. This makes the visual change smooth instead of instant.
+
+      <span class="text-red-500 font-semibold">spriteElement.style.filter = 'brightness(3) saturate(0)';</span>  
+      This line triggers the visual effect. It increases the brightness of the sprite and removes color by setting saturation to 0. This makes it look almost completely white.
+
+      Together, these two lines create a smooth flash, transformation effect when the animation function runs. Fun fact, I found it easier to instead increase the brightness of the Creeper rather than trying to add a white overlay to it. :)
+    code: |
+      spriteElement.style.transition = 'filter 1s ease-in-out';
+      spriteElement.style.filter = 'brightness(3) saturate(0)';

@@ -1,0 +1,56 @@
+Title: <span class="text-amber-400 font-bold">Enemy Movement</span>
+Description: The first thing we did with our enemy was make a way for it to bounce around a certain area of the screen, this is what we call the movement of the enemy, our Creeper. 
+Topics: 
+  - title: "Walking Area Coordinates"
+    subtitle: "Defining a specific area for movement"
+    code: |
+      walkingArea: {
+        xMin: width / 10,
+        xMax: (width * 5 / 7),
+        yMin: height / 4,
+        yMax: (height * 8 / 15)
+      }
+    description: |
+      This code defines a walking area within a given space using coordinates for the x and y axes. It calculates the boundaries of the area dynamically based on the width and height of the space.
+
+      <span class="text-amber-400 font-semibold">xMin: width / 10:</span> Defines the left boundary of the walking area.
+
+      <span class="text-amber-400 font-semibold">xMax: (width * 5 / 7):</span> Defines the right boundary of the walking area.
+
+      <span class="text-amber-400 font-semibold">yMin: height / 4:</span> Defines the top boundary of the walking area.
+
+      <span class="text-amber-400 font-semibold">yMax: (height * 8 / 15):</span> Defines the bottom boundary of the walking area.
+
+      <span class="text-indigo-50 font-bold">IMPORTANT!:</span> Increasing the denominator (e.g. 1/5) reduces the boundary, shrinking the area. Decreasing the denominator (e.g. 1/30) enlarges the area.
+
+  - title: "Movement Speed and Direction"
+    subtitle: "Controlling how fast and in what direction the enemy moves"
+    code: |
+      speed: 10,
+      direction: { x: 1, y: 1 }
+    description: |
+      This code sets the movement behavior of the enemy.
+
+      <span class="text-amber-400 font-semibold">speed: 10</span> sets how fast the enemy moves. Higher numbers mean faster movement.
+
+      <span class="text-amber-400 font-semibold">direction: { x: 1, y: 1 }</span> controls the direction the enemy is moving:
+      - <code>x: 1</code> means moving to the right, <code>-1</code> would move left.
+      - <code>y: 1</code> means moving down, <code>-1</code> would move up.
+
+      When the enemy hits a wall, you can reverse the direction values to make it bounce.
+
+  - title: "Updating Enemy Position"
+    subtitle: "Calculating new position on each frame"
+    code: |
+      updatePosition: function () {
+        this.INIT_POSITION.x += this.direction.x * this.speed;
+        this.INIT_POSITION.y += this.direction.y * this.speed;
+      }
+    description: |
+      This function updates the enemy's current position based on its direction and speed.
+
+      <span class="text-amber-400 font-semibold">this.INIT_POSITION.x += this.direction.x * this.speed:</span> Increases or decreases the horizontal (x) position by multiplying speed with horizontal direction.
+
+      <span class="text-amber-400 font-semibold">this.INIT_POSITION.y += this.direction.y * this.speed:</span> Does the same for the vertical (y) position.
+
+      This update typically happens inside a game loop, causing the enemy to move each frame.
