@@ -1,0 +1,47 @@
+<div>
+    {% assign data = include.data %}
+    <div class="container mx-auto">
+      <!-- Header Section -->
+      <div class="p-6 rounded-lg shadow-md text-white bg-zinc-800 dark:bg-zinc-900">
+        <h1 class="text-5xl mb-4 font-serif">{{ data.Title }}</h1>
+        <p class="text-lg mb-4 font-sans">{{ data.Description }}</p>
+      </div>
+  
+      <!-- Rows Section -->
+      <div id="rows" class="grid gap-6 p-6">
+        {% for topic in data.Topics %}
+          <div class="grid md:grid-cols-3 gap-6 items-start p-6 rounded-2xl shadow-lg bg-zinc-800 text-white dark:bg-zinc-900">
+  
+            <!-- Image Column (Optional) -->
+            {% if topic.image %}
+            <div class="text-center">
+              <a href="{{ site.baseurl }}{{ topic.link }}">
+                <img src="{{ site.baseurl }}/images/{{ topic.image }}" alt="{{ topic.alt | default: 'Image' }}" class="rounded-lg mx-auto h-40 object-cover">
+              </a>
+            </div>
+            {% else %}
+            <div></div>
+            {% endif %}
+  
+            <!-- Key Points Column -->
+            <div>
+              <h3 class="text-xl font-semibold mb-2 font-serif">{{ topic.title }}</h3>
+              <ul class="list-disc list-inside text-sm font-sans">
+                {% for point in topic.keyPoints %}
+                  <li>{{ point }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+  
+            <!-- Description Column (styled like codeExplain.html) -->
+            <div>
+              <h4 class="text-lg font-semibold mb-2 font-serif">{{ topic.subtitle }}</h4>
+              <p class="text-sm font-sans whitespace-pre-line">{{ topic.description }}</p>
+            </div>
+  
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  
