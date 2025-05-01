@@ -11,4 +11,3 @@ Topics:
       <span class="text-amber-400 font-semibold">Animation:</span> After a few seconds, you see the creeper light up for a moment, then go back to its normal state. If you haven't played Minecraft before, this is something creepers actually do in the game! (Sound included).
 
       <span class="text-amber-400 font-semibold">Collision:</span> Then, the example shows that when the player character collides with the creeper, they explode into bits! The level then restarts. 
-    video: "example.mp4"

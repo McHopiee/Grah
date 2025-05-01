@@ -3,7 +3,7 @@ description: "McHopiee's CSSE Coding Blog"
 owner_name: Hope Fune 
 github_username: McHopiee
 github_repo: "Grah_Blog" 
-# baseurl: "/student_2025"
+baseurl: "/Grah_Blog"
 future: true
 remote_theme: jekyll/minima
 minima:
