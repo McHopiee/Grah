@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Title: "Card Example"
 Description: "Literally just to show the card layout"
 Topics:
@@ -18,4 +19,26 @@ Topics:
       - "Some ideas / suggested code for hacks"
       - "Explanation of why these are important"
     subtitle: "Animation Lesson"
+=======
+Title: "Card Example"
+Description: "Literally just to show the card layout"
+Topics:
+  - title: "Enemy Animation Demo"
+    image: "/gamify/animex.png"
+    link: "/gamify/animex"
+    alt: "animex"
+    keyPoints:
+      - "Fades into 'white', then fades back to normal"
+      - "Plays the Creeper hissing sound :D"
+    subtitle: "Example: Overworld's Creeper Animation Fade"
+    description: "Now that you have completed your enemy's movement, you can now add animation to it. Whether that be fading or having particles around it, it's up to you! Since we have a creeper, our example will be a creeper fading in and out of white, as it does in Minecraft."
+  - title: "Enemy Animation Guide"
+    image: "/gamify/animcode.png"
+    link: "/gamify/animcode"
+    alt: "animcode"
+    keyPoints:
+      - "Some ideas / suggested code for hacks"
+      - "Explanation of why these are important"
+    subtitle: "Animation Lesson"
+>>>>>>> c8fb730 (gr)
     description: "As we did with our very first lesson for death animations, we will be going over some code that we used to make our animation. We'll be adding a few more lines to our code created in lesson one."
