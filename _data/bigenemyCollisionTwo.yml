@@ -1,0 +1,6 @@
+Title: <span class="text-blue-800 font-bold">Enemy Collision pt. 2</span>
+Description: Now that we've created the files needed for our enemy, we need to add the code that will make it move. We also need to add the code that will make it so that when the player bumps into it, it will cause a consequence.
+Topics:
+  - title: Checking Proximity
+    subtitle: "In order for the creeper to check for collisions, we need to check the creeper's proximity to the player. We can do this by checking the distance between the two objects. If the distance is less than a certain value, we can assume that they are close enough to collide."
+    description: |
