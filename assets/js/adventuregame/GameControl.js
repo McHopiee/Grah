@@ -11,9 +11,12 @@ class GameControl {
      * @param {*} path - The path to the game assets
      * @param {*} levelClasses - The classes of for each game level
      */
-    constructor(path, levelClasses = [GameLevelBasement, GameLevelMC, GameLevelWater]) {
+    constructor(path, levelClasses) {
         // GameControl properties
-        this.path = path;
+        this.game = game; // Reference required for game-in-game logic
+        this.path = game.path;
+        this.gameContainer = game.gameContainer; // Document element that contains the game
+        this.gameCanvas = game.gameCanvas; // Document element that contains the game canvas
         this.levelClasses = levelClasses;
         this.currentLevel = null;
         this.currentLevelIndex = 0;
