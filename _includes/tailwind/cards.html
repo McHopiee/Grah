@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <div>
   {% assign data = include.data%}
   <div class="container mx-auto">
@@ -49,55 +48,3 @@
 
   </div>
 </div>
-=======
-<div>
-  {% assign data = include.data%}
-  <div class="container mx-auto">
-    
-    <!-- Header Section -->
-    <div class="text-center p-6">
-      <h1 class="text-5xl font-bold mb-2 font-serif">{{ data.Title }}</h1> <!-- Title with Serif Font -->
-      <p class="text-lg text-gray-600 font-sans">{{ data.Description }}</p> <!-- Description with Sans Font -->
-    </div>
-
-    <!-- Cards Section -->
-    <div id="cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {% for topic in data.Topics %}
-        <div class="bg-gray-700 text-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-          
-          <!-- Image at Top -->
-          <a href="{{ site.baseurl }}{{ topic.link }}">
-            <img src="{{ site.baseurl }}/images/{{ topic.image }}" alt="{{ topic.alt }}" class="w-full h-48 object-cover">
-          </a>
-
-          <!-- Content -->
-          <div class="p-4">
-            <!-- Title and Subtitle -->
-            <h3 class="text-2xl font-semibold mb-1 font-serif">{{ topic.title }}</h3> <!-- Title with Serif Font -->
-            <h4 class="text-md text-gray-400 mb-3 font-mono">{{ topic.subtitle }}</h4> <!-- Subtitle with Monospace Font -->
-
-            <!-- Description -->
-            <p class="text-sm mb-4 font-sans">{{ topic.description }}</p> <!-- Description with Sans Font -->
-
-            <!-- Key Points List -->
-            <ul class="list-disc list-inside text-sm font-sans mb-4">
-              {% for point in topic.keyPoints %}
-                <li>{{ point }}</li>
-              {% endfor %}
-            </ul>
-
-            <!-- Code Snippet Section (Optional) -->
-            {% if topic.code %}
-              <div class="bg-gray-900 text-green-400 font-mono text-xs p-4 rounded-md overflow-x-auto">
-                <pre><code>{{ topic.code | escape }}</code></pre>
-              </div>
-            {% endif %}
-          </div>
-          
-        </div>
-      {% endfor %}
-    </div>
-
-  </div>
-</div>
->>>>>>> c8fb730 (gr)
