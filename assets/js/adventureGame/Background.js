@@ -1,5 +1,5 @@
-import GameEnv from './GameEnv.js';
-import GameObject from './GameObject.js';
+import GameEnv from './GameEngine/GameEnv.js';
+import GameObject from './GameEngine/GameObject.js';
 
 /** Background class for primary background
  * 

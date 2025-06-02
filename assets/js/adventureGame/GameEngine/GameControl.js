@@ -1,8 +1,8 @@
 // GameControl.js
-import GameLevel from "./GameLevel.js";
-import GameLevelWater from "./GameLevelWater.js";
-import GameLevelBasement from "./GameLevelBasement.js";
-import GameLevelMC from "./GameLevelMC.js";
+import GameLevel from "../../GameLevel.js";
+import GameLevelWater from "../GameLevelWater.js";
+import GameLevelBasement from "../GameLevelBasement.js";  
+import GameLevelMC from "../GameLevelMC.js";
 
 
 class GameControl { 

@@ -16,7 +16,24 @@ permalink: /gamify/adventureGame
 </div>
 
 <script type="module">
-    import GameControl from '{{site.baseurl}}/assets/js/adventureGame/GameControl.js';
+    import GameLevelBasement from "{{site.baseurl}}/assets/js/adventureGame/GameLevelBasement.js";
+    import GameLevelMC from "{{site.baseurl}}/assets/js/adventureGame/GameLevelMC.js";
+    import { pythonURI, javaURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
     const path = "{{site.baseurl}}";
     new GameControl(path).start();
+
+    const gameLevelClasses = [GameLevelBasement, GameLevelMC];
+
+    const environment = {
+        path:"{{site.baseurl}}",
+        pythonURI: pythonURI,
+        javaURI: javaURI,
+        fetchOptions: fetchOptions,
+        gameContainer: document.getElementById("gameContainer"),
+        gameCanvas: document.getElementById("gameCanvas"),
+        gameLevelClasses: gameLevelClasses
+
+    }
+    // Launch Adventure Game
+    Game.main(environment);
 </script>

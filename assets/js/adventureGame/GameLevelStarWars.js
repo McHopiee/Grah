@@ -1,6 +1,6 @@
 import Background from './Background.js';
-import Player from './Player.js';
-import Npc from './Npc.js';
+import Player from './GameEngine/Player.js';
+import Npc from './GameEngine/Npc.js';
 import Projectile from './Projectile.js';
 
 class GameLevelStarWars {

@@ -1,8 +1,8 @@
 // To build GameLevels, each contains GameObjects from below imports
 import Background from './Background.js';
 import Player from './Player.js';
-import Npc from './Npc.js';
-import GameControl from './GameControl.js';
+import Npc from './GameEngine/Npc.js';
+import GameControl from './GameEngine/GameControl.js';
 import Creeper from './Creeper.js'; // Import the Creeper class
 
 class GameLevelMC {
@@ -144,16 +144,6 @@ class GameLevelMC {
       hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
       reaction: function () {
         alert(sprite_greet_villager);
-      },
-      interact: function () {
-        let primaryGame = gameEnv.gameControl;
-        let levelArray = [GameLevelPlatform];
-        let gameInGame = new GameControl(gameEnv.game, levelArray);
-        primaryGame.pause();
-        gameInGame.start();
-        gameInGame.gameOver = function () {
-          primaryGame.resume();
-        };
       }
     };
 
@@ -162,6 +152,7 @@ class GameLevelMC {
       { class: Player, data: sprite_data_player },
       { class: Npc, data: sprite_data_villager },
       { class: Creeper, data: sprite_data_creeper },
+      { class: GameControl, data: {} } // Example: include GameControl
     ];
   }
 }

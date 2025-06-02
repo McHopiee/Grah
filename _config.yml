@@ -25,5 +25,3 @@ header_pages:
   - navigation/about.md
   - navigation/adventuregame.md
   - README4YML.md
-include: 
-  - assets/js/adventureGame/GameControl.js
