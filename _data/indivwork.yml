@@ -1,0 +1,15 @@
+# indivdual work on adventure/platformer game 
+Title: "Individual Work On Adventure Game"
+Description: "Contributions to the Overworld Adventure/Platformer Game this Trimester."
+Topics:
+  - title: "Creeper Movement Demo"
+    image: "adventureGame/arceus.png"
+    link: "/gamify/adventureGame/topics/backgrounds"
+    alt: "Arceus"
+    keyPoints:
+      - "Game Environment"
+      - "Top Down View"
+      - "Tile Based"
+      - "Parallax Scrolling"
+    subtitle: "Theme and Style"
+    description: "The background of a game establishes its theme and style, creating the foundation for the player's experience. This is your opportunity to get creative and make your game stand out."
