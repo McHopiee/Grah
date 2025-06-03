@@ -1,5 +1,5 @@
-import Enemy from './GameEngine/Enemy.js';
-import Player from './GameEngine/Player.js';
+import Enemy from './Enemy.js';
+import Player from './Player.js';
 
 class Pufferfish extends Enemy {
     constructor(data = null, gameEnv = null) {

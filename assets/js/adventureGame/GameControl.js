@@ -1,7 +1,7 @@
 // GameControl.js
 import GameLevel from "./GameLevel.js";
-import GameLevelWater from "./GameLevelWater.js";
-import GameLevelBasement from "./GameLevelBasement.js";
+// import GameLevelWater from "./GameLevelWater.js";
+import GameLevelBasement from "./GameLevelBasement.js";  
 import GameLevelMC from "./GameLevelMC.js";
 
 
@@ -13,10 +13,7 @@ class GameControl {
      */
     constructor(path, levelClasses = [GameLevelBasement, GameLevelMC]) {
         // GameControl properties
-        this.game = game; // Reference required for game-in-game logic
-        this.path = game.path;
-        this.gameContainer = game.gameContainer; // Document element that contains the game
-        this.gameCanvas = game.gameCanvas; // Document element that contains the game canvas
+        this.path = path;
         this.levelClasses = levelClasses;
         this.currentLevel = null;
         this.currentLevelIndex = 0;

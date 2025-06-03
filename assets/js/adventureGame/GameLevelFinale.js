@@ -1,8 +1,6 @@
 import Background from './Background.js';
 import Npc from './Npc.js';
 import Player from './Player.js';
-import GameControl from './GameControl.js';
-import GameLevelStarWars from './GameLevelStarWars.js';
 
 class GameLevelFinale {
   /**

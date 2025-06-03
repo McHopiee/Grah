@@ -14,20 +14,30 @@ class GameLevel {
         this.gameEnv.create();
         this.gameLevel = new GameLevelClass(this.gameEnv);
         this.gameObjectClasses = this.gameLevel.classes;
+
         for (let gameObjectClass of this.gameObjectClasses) {
             if (!gameObjectClass.data) gameObjectClass.data = {};
             let gameObject = new gameObjectClass.class(gameObjectClass.data, this.gameEnv);
+
+            // Provide default no-op update and resize methods if missing
+            if (typeof gameObject.update !== "function") {
+                gameObject.update = () => {};
+            }
+            if (typeof gameObject.resize !== "function") {
+                gameObject.resize = () => {};
+            }
+
             this.gameEnv.gameObjects.push(gameObject);
         }
+
         // Add event listener for window resize
         window.addEventListener('resize', this.resize.bind(this));
     }
 
     destroy() {
         for (let index = this.gameEnv.gameObjects.length - 1; index >= 0; index--) {
-             this.gameEnv.gameObjects[index].destroy();
+            this.gameEnv.gameObjects[index].destroy();
         }
-        // Remove event listener for window resize
         window.removeEventListener('resize', this.resize.bind(this));
     }
 
@@ -44,7 +54,6 @@ class GameLevel {
             gameObject.resize();
         }
     }
-
 }
 
 export default GameLevel;

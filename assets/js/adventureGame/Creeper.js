@@ -1,6 +1,5 @@
-import Enemy from './GameEngine/Enemy.js';
-import GameEnv from './GameEngine/GameEnv.js';
-import Player from './GameEngine/Player.js';
+import Enemy from './Enemy.js';
+import Player from './Player.js';
 
 class Creeper extends Enemy {
     constructor(data = null, gameEnv = null) {
