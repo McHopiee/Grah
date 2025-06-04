@@ -5,9 +5,10 @@ export class FinishLine extends GamePlatformerObject {
     constructor(data, gameEnv) {
         const canvas = document.getElementById('gameCanvas');
         const image = new window.Image();
+        const path = "/Grah_Blog"
 
         // Fallback to a default image if src is missing
-        image.src = data.src || "/images/gamify/loading.jpg";
+        image.src = data.src || path + "/images/gamify/loading.jpg";
 
         // Extract extra parameters from data if needed
         const xPercentage = data.xPercentage ?? 0;

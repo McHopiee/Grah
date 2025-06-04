@@ -1,59 +1,11 @@
 /**
  * GameEnv.js key purpose is to manage shared game environment data and methods.
  * 
- * @class
- * @classdesc GameEnv is defined as a static class, this ensures that there is only one instance of the class.
- * Static classes do not have a constructor, cannot be instantiated, do not have instance variables, only singleton/static variables,
- * do not have instance methods, only singleton/static methods, is similar in namespace to an object literal, but is a class.
- * The benefit is it is similar to other coding languages (e.g. Java, C#), thus is more readable to other developers.
- * 
- * Purpose of GameEnv:
- * - stores game objects (e.g. gameObjects, player, levels, etc.)
- * - stores game attributes (e.g. gravity, speed, width, height, top, bottom, etc.)
- * - defines methods to update, draw, and destroy game objects
- * - defines methods to initialize and resize game objects
- * 
- * Usage Notes:
- * GameEnv is used by other classes to manage the game environment.  
- * It is dangerous to use GameEnv directly, it is not protected from misuse. Comments below show locations of usage.
- * Here are some methods supported by GameEnv:
- * - call GameEnv.initialize() to initialize window dimensions
- * - call GameEnv.resize() to resize game objects
- * - call GameEnv.update() to update, serialize, and draw game objects
- * - call GameEnv.destroy() to destroy game objects
+ * Updated for smooth transitions between game modes.
  */
 export class GameEnv {
 
-    /**
-     * @static
-     * @property {string} userID - localstorage key, used by GameControl
-     * @property {Object} player - used by GameControl
-     * @property {Array} levels - used by GameControl
-     * @property {Object} currentLevel - used by GameControl
-     * @property {Array} gameObjects - used by GameControl
-     * @property {boolean} isInverted - localstorage key, canvas filter property, used by GameControl
-     * @property {boolean} invincible - invincibility for the mario when stomping on Goomba
-     * @property {boolean} goombaInvincible - invincibility for the goomba when mario touch
-     * @property {boolean} goombaBounce - mario touch goomba --> bounce
-     * @property {boolean} goombaBounce1 - bounce on mushroom
-     * @property {number} gameSpeed - localstorage key, used by platformer objects
-     * @property {number} backgroundDirection- used by background objects
-     * @property {boolean} transitionHide - used to hide the transition screen
-     * @property {number} gravity - localstorage key, used by platformer objects
-     * @property {boolean} destroyedMushroom - to see when mushroom is destroyed
-     * @property {boolean} destroyedMagicBeam - to see when magic beam is destroyed
-     * @property {boolean} destroyedChocoFrog - to see when chocofrog is destroyed
-     * @property {boolean} playMessage
-     * @property {Object} difficulty - localstorage key, used by GameControl
-     * @property {number} innerWidth - used by platformer objects
-     * @property {number} prevInnerWidth - used by platformer objects
-     * @property {number} innerHeight - used by platformer objects
-     * @property {number} top - used by platformer objects
-     * @property {number} bottom - used by platformer objects
-     * @property {number} prevBottom - used by platformer objects
-     * @property {number} time - Initialize time variable, used by timer objects
-     * @property {number} timerInterval - Variable to hold the interval reference, used by timer objects
-     */
+    // Static properties as before...
     static userID = "Guest";
     static player = null;
     static levels = [];
@@ -91,17 +43,15 @@ export class GameEnv {
 
     static claimedCoinIds = [];
 
-    // Make the constructor throws an error, or effectively make it a private constructor.
+    // Prevent instantiation
     constructor() {
         throw new Error('GameEnv is a static class and cannot be instantiated.');
     }
   
     /**
-     * Setter for Top position, called by initialize in GameEnv
-     * @static
+     * Set top of game as header height
      */
     static setTop() {
-        // set top of game as header height
         const header = document.querySelector('header');
         if (header) {
             this.top = header.offsetHeight;
@@ -111,39 +61,53 @@ export class GameEnv {
     }
   
     /**
-     * Setter for Bottom position, called by resize in GameEnv
-     * @static
+     * Set bottom boundary for the game environment
      */
     static setBottom() {
-        // sets the bottom or gravity 0
         this.bottom = this.top + (this.backgroundHeight || 0);
     }
   
     /**
-     * Setup for Game Environment, called by transitionToLevel in GameControl
-     * @static
+     * Initialize environment dimensions and reset any dynamic properties
      */
     static initialize() {
-        // store previous for ratio calculations on resize
+        // Reset key gameplay properties here if needed on transition
         this.prevInnerWidth = this.innerWidth;
         this.prevBottom = this.bottom;
-    
-        // game uses available width and height
+
         this.innerWidth = window.innerWidth;
         this.innerHeight = window.innerHeight;
         this.setTop();
-        //this.setBottom(); // must be called in platformer objects
+        this.setBottom();
+
+        // Reset dynamic gameplay flags
+        this.invincible = false;
+        this.goombaInvincible = false;
+        this.goombaBounce = false;
+        this.goombaBounce1 = false;
+        this.destroyedMushroom = false;
+        this.destroyedMagicBeam = false;
+        this.destroyedChocoFrog = false;
+        this.playMessage = false;
+        this.playerAttack = false;
+        this.backgroundDirection = 0;
+        this.coinScore = 0;
+        this.time = 0;
+        this.timerActive = false;
+        this.playerChange = false;
+        this.claimedCoinIds = [];
+
+        // If you want to reset difficulty or other persistent state, do it here or elsewhere
     }
   
     /**
-     * Resize game objects, called by resize in GameControl
-     * @static
-     */    
+     * Resize game objects based on new window size
+     */
     static resize() {
-        GameEnv.initialize();  // Update GameEnv dimensions
-  
-        // Call the sizing method on all game objects
-        for (var gameObject of GameEnv.gameObjects){
+        this.initialize();  // Recalculate sizes
+
+        // Resize all game objects safely
+        for (const gameObject of this.gameObjects) {
             if (typeof gameObject.size === "function") {
                 gameObject.size();
             }
@@ -151,41 +115,40 @@ export class GameEnv {
     }
   
     /**
-     * Update, serialize, and draw game objects, called by update in GameControl
-     * @static
+     * Update, serialize, and draw game objects
      */
     static update() {
-        // Only update if player is not dying
-        if (GameEnv.player === null || GameEnv.player.state?.isDying === false) {
-            for (const gameObject of GameEnv.gameObjects) {
+        if (this.player === null || this.player.state?.isDying === false) {
+            for (const gameObject of this.gameObjects) {
                 if (typeof gameObject.update === "function") gameObject.update();
                 if (typeof gameObject.serialize === "function") gameObject.serialize();
                 if (typeof gameObject.draw === "function") gameObject.draw();
-            } 
+            }
         }
     }
   
     /**
-     * Destroy game objects, called by destroy in GameControl
-     * @static
+     * Destroy all game objects and clear arrays for clean transition
      */
     static destroy() {
-        // Destroy objects in reverse order
-        for (var i = GameEnv.gameObjects.length - 1; i >= 0; i--) {
-            const gameObject = GameEnv.gameObjects[i];
+        // Destroy objects in reverse order safely
+        for (let i = this.gameObjects.length - 1; i >= 0; i--) {
+            const gameObject = this.gameObjects[i];
             if (typeof gameObject.destroy === "function") {
                 gameObject.destroy();
             }
         }
-        GameEnv.gameObjects = [];
+        this.gameObjects = [];
+        this.player = null;
+        this.currentLevel = null;
+        this.levels = [];
     }
   
     /**
-     * Set "canvas filter property" between inverted and normal, called by setInvert in GameControl
-     * @static
+     * Toggle canvas filter for invert mode
      */
     static setInvert() {
-        for (var gameObject of GameEnv.gameObjects){
+        for (const gameObject of this.gameObjects) {
             if (gameObject.invert && !this.isInverted) {
                 gameObject.canvas.style.filter = "none";
             } else if (gameObject.invert && this.isInverted) {
@@ -197,51 +160,57 @@ export class GameEnv {
     }
 
     static PlayerPosition = {
-      playerX: 0,
-      playerY: 0
+        playerX: 0,
+        playerY: 0
     };
 
-    // Play a sound by its ID
+    /**
+     * Play a sound by element ID
+     * @param {string} id - id of the audio element
+     */
     static playSound(id) {
         const sound = document.getElementById(id);
         if (sound) sound.play();
     }
 
+    /**
+     * Update parallax background direction based on key inputs
+     * @param {string} key - the key pressed
+     */
     static updateParallaxDirection(key) {
-        // keys is not defined in this scope, so let's use the player's pressedKeys if available
         let keys = [];
-        if (GameEnv.player && GameEnv.player.pressedKeys) {
-            keys = Object.keys(GameEnv.player.pressedKeys);
+        if (this.player && this.player.pressedKeys) {
+            keys = Object.keys(this.player.pressedKeys);
         }
         switch (key) {
             case "a":
-                if (GameEnv.player?.x > 2) {
-                    GameEnv.backgroundDirection = -1;
-                }
+                if (this.player?.x > 2) this.backgroundDirection = -1;
                 break;
             case "d":
-                if (GameEnv.player?.x < (GameEnv.innerWidth - 2)) {
-                    GameEnv.backgroundDirection = 1;
-                }
+                if (this.player?.x < (this.innerWidth - 2)) this.backgroundDirection = 1;
                 break;
             case "s":
-                if (keys.includes("a") && keys.includes("s")) {
-                    if (GameEnv.player?.x > 2) {
-                        GameEnv.backgroundDirection = -5;
-                    }
-                } else if (keys.includes("d") && keys.includes("s")) {
-                    if (GameEnv.player?.x < (GameEnv.innerWidth - 2)) {
-                        GameEnv.backgroundDirection = 5;
-                    }
+                if (keys.includes("a") && keys.includes("s") && this.player?.x > 2) {
+                    this.backgroundDirection = -5;
+                } else if (keys.includes("d") && keys.includes("s") && this.player?.x < (this.innerWidth - 2)) {
+                    this.backgroundDirection = 5;
                 } else {
-                    GameEnv.backgroundDirection = 0;
+                    this.backgroundDirection = 0;
                 }
                 break;
             default:
-                GameEnv.backgroundDirection = 0;
+                this.backgroundDirection = 0;
                 break;
         }
     }
+
+    /**
+     * Reset all environment properties and game objects for clean start or transition
+     */
+    static reset() {
+        this.destroy();
+        this.initialize();
+    }
 }
-  
+
 export default GameEnv;

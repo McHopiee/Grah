@@ -1,56 +1,51 @@
 import GameEnv from './PlatformerEngine/GameEnv.js';
 
 class GamePlatformerObject {
-    // container for all game objects in game
-    constructor(canvas, image, data) {
+    constructor(canvas, image, data = {}) { // Default data to an empty object
         if (!canvas || typeof canvas.getContext !== "function") {
             throw new Error('GamePlatformerObject: Provided canvas is invalid or not found.');
         }
-        this.x = 0;
-        this.y = 0;
+
+        this.x = data.x ?? 0;
+        this.y = data.y ?? 0;
         this.frame = 0;
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.image = image;
-        this.width = image.width;  // from Image() width
-        this.height = image.height; // from Image() height
+        this.width = image.width || 0;
+        this.height = image.height || 0;
         this.collisionWidth = 0;
         this.collisionHeight = 0;
-        this.aspect_ratio = this.width / this.height;
-        this.speedRatio = data?.speedRatio || 0;
+        this.aspect_ratio = this.width && this.height ? (this.width / this.height) : 1;
+        this.speedRatio = data.speedRatio ?? 0;
         this.speed = GameEnv.gameSpeed * this.speedRatio;
         this.invert = true;
         this.collisionData = {};
         this.jsonifiedElement = '';
-        this.shouldBeSynced = false; //if the object should be synced with the server
-        this.hitbox = data?.hitbox || {};
-        // Add this object to the game object array so collision can be detected
-        // among other things
+        this.shouldBeSynced = false;
+        this.hitbox = data.hitbox ?? {};
+
+        // Add this object to the game object array
         GameEnv.gameObjects.push(this); 
     }
 
-    // extract change from Game Objects into JSON
     serialize() {
         this.logElement();
     }
 
-    // log Character element change
     logElement() {
-        var jsonifiedElement = this.stringifyElement();
-        if (jsonifiedElement !== this.jsonifiedElement) {
-            //console.log(jsonifiedElement);
+        const jsonifiedElement = this.stringifyElement();
+        if (JSON.stringify(jsonifiedElement) !== JSON.stringify(this.jsonifiedElement)) {
             this.jsonifiedElement = jsonifiedElement;
             if (this.shouldBeSynced && !GameEnv.inTransition) {
-                Socket.sendData("update",this.jsonifiedElement);
+                Socket.sendData("update", this.jsonifiedElement);
             }
         }
     }
 
-    // strigify Character key data
     stringifyElement() {
-        var element = this.canvas;
+        const element = this.canvas;
         if (element && element.id) {
-            // Convert the relevant properties of the element to a string for comparison
             return {
                 id: element.id,
                 width: element.width,
@@ -61,27 +56,23 @@ class GamePlatformerObject {
                     top: element.style.top
                 },
                 filter: element.style.filter,
-                tag: GameEnv.currentLevel.tag,
+                tag: GameEnv.currentLevel?.tag,
                 x: this.x / GameEnv.innerWidth,
                 y: (this.y - GameEnv.top) / (GameEnv.bottom - GameEnv.top),
                 frameY: this.frameY
             };
         }
+        return {};
     }
 
-    // X position getter and setter
     getX() {
         return this.x;
     }
 
     setX(x) {
-        if (x < 0) {
-            x = 0;
-        }
-        this.x = x;
+        this.x = Math.max(0, x);
     }
 
-    // Y position getter and setter
     getY() {
         return this.y;
     }
@@ -97,59 +88,40 @@ class GamePlatformerObject {
     }
 
     updateInfo(json) {
-        var element = this.canvas;
-        if (json.id === element.id) {
-            console.log("runs", json.width, json.height)
+        if (json.id === this.canvas.id) {
+            console.log("runs", json.width, json.height);
             this.canvas.width = json.width;
             this.canvas.height = json.height;
             this.canvas.style.filter = json.filter;
-            var element = this.canvas;
-            //this.x = json.x * GameEnv.innerWidth;
-            //this.y = (json.y * (GameEnv.bottom - GameEnv.top)) + GameEnv.top;
-            this.frameY = json.frameY
+            this.frameY = json.frameY;
+            return true;
         }
-        return json.id === element.id
+        return false;
     }
 
-    /* Destroy Game Object
-    * remove canvas element of object
-    * remove object from GameObject array
-    */
     destroy() {
         const index = GameEnv.gameObjects.indexOf(this);
         if (index !== -1) {
-            // Remove the canvas from the DOM, if it exists and has a parent
-            if (this.canvas && this.canvas.parentNode) {
+            if (this.canvas?.parentNode) {
                 this.canvas.parentNode.removeChild(this.canvas);
             }
             GameEnv.gameObjects.splice(index, 1);
         }
     }
 
-    
-    /* Default collision action is no action
-     * override when you extend for custom action
-    */
-    collisionAction(){
-        // no action
+    collisionAction() {
+        // Default: do nothing
     }
 
-    /* Default floor action is no action
-     * override when you extend for custom action
-    */
-    floorAction(){
-        // no action
+    floorAction() {
+        // Default: do nothing
     }
 
-    /* Collision checks
-     * uses GameObject isCollision to detect hit
-     * calls collisionAction on hit
-    */
     collisionChecks() {
-        for (var gameObj of GameEnv.gameObjects){
-            if (this != gameObj ) {
+        for (const gameObj of GameEnv.gameObjects) {
+            if (this !== gameObj) {
                 this.isCollision(gameObj);
-                if (this.collisionData.hit){
+                if (this.collisionData.hit) {
                     this.collisionAction();
                 }
                 if (this.collisionData.atFloor) {
@@ -159,42 +131,32 @@ class GamePlatformerObject {
         }
     }
 
-    /* Collision detection method
-     * usage: if (player.isCollision(platform)) { // action }
-    */
     isCollision(other) {
-        // Bounding rectangles from Canvas
         const thisRect = this.canvas.getBoundingClientRect();
         const otherRect = other.canvas.getBoundingClientRect();
-    
-        // Calculate center points of rectangles
+
         const thisCenterX = (thisRect.left + thisRect.right) / 2;
         const otherCenterX = (otherRect.left + otherRect.right) / 2;
 
-        // Calculate new center points of rectangles
         const thisRectWidth = thisRect.right - thisRect.left;
         const thisRectLeftNew = otherCenterX - thisRectWidth / 2;
-    
-        // Calculate hitbox constants
-        var widthPercentage = this.hitbox?.widthPercentage || 0.0;
-        var heightPercentage = this.hitbox?.heightPercentage || 0.0;
-    
-        // Calculate hitbox reductions from the width and height
+
+        const widthPercentage = this.hitbox.widthPercentage ?? 0.0;
+        const heightPercentage = this.hitbox.heightPercentage ?? 0.0;
+
         const widthReduction = thisRect.width * widthPercentage;
         const heightReduction = thisRect.height * heightPercentage;
-    
-        // Build hitbox by subtracting reductions from the left, right, top, and bottom
+
         const thisLeft = thisRect.left + widthReduction;
         const thisTop = thisRect.top + heightReduction;
         const thisRight = thisRect.right - widthReduction;
         const thisBottom = thisRect.bottom;
-        const tolerance = 10; // Adjust as needed
 
-        // Determine if this object's bottom exactly aligns with the other object's top
+        const tolerance = 10;
         const onTopofOther = Math.abs(thisBottom - otherRect.top) <= tolerance;
-        // Determine hit and touch points of hit
+
         this.collisionData = {
-            newX: thisRectLeftNew, // proportionally adjust left to center over other object
+            newX: thisRectLeftNew,
             hit: (
                 thisLeft < otherRect.right &&
                 thisRight > otherRect.left &&
@@ -220,9 +182,7 @@ class GamePlatformerObject {
                 },
             },
         };
-
     }
-    
 }
 
 export default GamePlatformerObject;

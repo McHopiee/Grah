@@ -25,3 +25,5 @@ header_pages:
   - navigation/about.md
   - navigation/adventuregame.md
   - README4YML.md
+include: 
+  - images

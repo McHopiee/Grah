@@ -4,7 +4,7 @@ import BackgroundPlat from './PlatformerEngine/BackgroundPlat.js';
 // Define the assets
 const assets = {
     backgrounds: {
-        start: { src: "/images/platformer/backgrounds/home.png" },
+        start: { src: "/images/gamify/loading.png" },
     },
 };
 

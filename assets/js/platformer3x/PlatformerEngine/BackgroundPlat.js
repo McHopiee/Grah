@@ -1,17 +1,28 @@
-// BackgroundPlat.js
 import GameEnv from './GameEnv.js';
 import GamePlatformerObject from '../GamePlatformerObject.js';
 import GameControl from './GameControl.js';
 
 class BackgroundPlat extends GamePlatformerObject {
     constructor(data, gameEnv) {
-        // Get canvas and image from DOM and data
-        const canvas = document.getElementById('gameCanvas');
+        // 1️⃣ Try to get existing canvas
+        let canvas = document.getElementById('gameCanvas');
+
+        // 2️⃣ If not found, create a new one
+        if (!canvas) {
+            console.warn("BackgroundPlat: 'gameCanvas' not found. Creating a new canvas.");
+            canvas = document.createElement('canvas');
+            canvas.id = 'gameCanvas';
+            document.body.appendChild(canvas);
+        }
+
+        // 3️⃣ Create and load the image
         const image = new window.Image();
         image.src = data.src;
 
+        // 4️⃣ Call parent constructor (safe now!)
         super(canvas, image, data);
 
+        // 5️⃣ Initialize canvas width/height
         if (isNaN(GameEnv.innerWidth) || isNaN(GameEnv.innerHeight)) {
             GameEnv.initialize();
         }
@@ -24,14 +35,17 @@ class BackgroundPlat extends GamePlatformerObject {
             this.canvasHeight = this.canvasWidth / (16 / 9);
         }
 
-        // Set default width/height if not provided by image
-        this.width = data.width || image.width || this.canvasWidth;
-        this.height = data.height || image.height || this.canvasHeight;
+        // 6️⃣ Set default width/height if not provided by image
+        this.width = data.width || this.canvasWidth;
+        this.height = data.height || this.canvasHeight;
 
         this.x = 0;
         this.y = 0;
 
-        console.log(`width:${this.canvasWidth}, height:${this.canvasHeight}`);
+        // 7️⃣ Size the canvas for rendering
+        this.size();
+
+        console.log(`BackgroundPlat created: width:${this.canvasWidth}, height:${this.canvasHeight}`);
     }
 
     update() {

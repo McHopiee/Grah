@@ -58,7 +58,7 @@ class GameLevelWater {
       hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
       interact: function () {
         let primaryGame = gameEnv.gameControl;
-        let levelArray = [GameLevelBasement];
+        let levelArray = [GameLevelWater];
         let gameInGame = new GameControl(path, levelArray);
         primaryGame.pause();
         gameInGame.start();

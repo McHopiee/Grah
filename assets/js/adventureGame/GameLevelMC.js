@@ -4,7 +4,7 @@ import Player from './Player.js';
 import Npc from './Npc.js';
 import GameControl from './GameControl.js';
 import Creeper from './Creeper.js';
-import GameSetterOverworldLevel from '../platformer3x/GameSetterOverworld.js'; // updated import
+import GameSetterOverworld from '../platformer3x/GameSetterOverworld.js';
 
 class GameLevelMC {
   constructor(gameEnv) {
@@ -95,6 +95,7 @@ class GameLevelMC {
           this.direction.y = -1;
         }
 
+        // Update DOM element if present
         const spriteElement = document.getElementById(this.id);
         if (spriteElement) {
           spriteElement.style.transform = this.direction.x === -1 ? "scaleX(-1)" : "scaleX(1)";
@@ -128,10 +129,12 @@ class GameLevelMC {
       }
     };
 
+    // Schedule creeper movement updates every 100ms
     setInterval(() => {
       sprite_data_creeper.updatePosition();
     }, 100);
 
+    // Schedule creeper animation every 5 seconds
     setInterval(() => {
       sprite_data_creeper.playAnimation();
     }, 5000);
@@ -157,11 +160,22 @@ class GameLevelMC {
 
       interact: async function () {
         if (confirm("Would you like to play the platformer challenge?")) {
-          window.dispatchEvent(new CustomEvent('loadPlatformer'));
+          if (typeof window.startPlatformerLevel === "function") {
+            // Pass the platformer level class in an array
+            window.startPlatformerLevel([GameSetterOverworld]);
+          } else if (this.gameControl) {
+            // Fallback if gameControl is defined (not always the case)
+            this.gameControl.levelClasses = [GameSetterOverworld];
+            this.gameControl.currentLevelIndex = 0;
+            this.gameControl.restartLevel();
+          } else {
+            alert("Platformer loader not found. Please implement window.startPlatformerLevel([GameSetterOverworld]) or provide gameControl.");
+          }
         }
       }
     };
 
+    // Proximity check + listen for 'e' key to interact with villager
     setTimeout(() => {
       function checkProximityAndListen() {
         const dx = (sprite_data_player.INIT_POSITION.x || 0) - (sprite_data_villager.INIT_POSITION.x || 0);
@@ -172,17 +186,21 @@ class GameLevelMC {
           function onE(e) {
             if (e.key.toLowerCase() === 'e') {
               sprite_data_villager.interact();
+              // Remove listener after one interaction
               document.removeEventListener('keydown', onE);
             }
           }
+          // Add keydown listener once player is near villager
           document.addEventListener('keydown', onE);
         } else {
+          // Keep checking proximity every 300ms
           setTimeout(checkProximityAndListen, 300);
         }
       }
       checkProximityAndListen();
     }, 1000);
 
+    // Store all classes and data to be used by GameControl or game runner
     this.classes = [
       { class: Background, data: image_data_main },
       { class: Player, data: sprite_data_player },
@@ -190,17 +208,6 @@ class GameLevelMC {
       { class: Creeper, data: sprite_data_creeper },
       { class: GameControl, data: {} }
     ];
-
-    // ⚡ Listen for platformer start event (assumes global gameControl)
-    window.addEventListener('loadPlatformer', () => {
-      if (window.gameControl) {
-        window.gameControl.levelClasses = [GameSetterOverworldLevel]; // updated to use the class
-        window.gameControl.currentLevelIndex = 0;
-        window.gameControl.restartLevel();
-      } else {
-        alert("Error: gameControl not found for platformer transition.");
-      }
-    });
   }
 }
 

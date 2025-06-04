@@ -11,18 +11,20 @@ import Zombie from './EnemyZombie.js';
 import Chicken from './Chicken.js';
 import FinishLine from './FinishLine.js';  
 
+const path = "/Grah_Blog"
+
 // ASSETS: Minecraft-style images
 const assets = {
   obstacles: {
-    grassBlock: { src: "/images/gamify/grass_block.jpg" },
-    sword: { src: "/images/gamify/sword.jpg" },
+    grassBlock: { src: path + "/images/gamify/grass_block.jpg" },
+    sword: { src: path + "/images/gamify/sword.jpg" },
   },
   backgrounds: {
-    overworld: { src: "/images/gamify/mcbackground.jpg" },
+    overworld: { src: path + "/images/gamify/mcbackground.jpg" },
   },
   players: {
     steve: {
-      src: "/images/gamify/steve.png",
+      src: path + "/images/gamify/steve.png",
       width: 32,
       height: 32,
       scaleSize: 60,
@@ -36,7 +38,7 @@ const assets = {
   },
   enemies: {
     zombie: {
-      src: "/images/gamify/zombie.png",
+      src: path + "/images/gamify/zombie.png",
       width: 32,
       height: 32,
       scaleSize: 60,
@@ -44,10 +46,10 @@ const assets = {
     },
   },
   npcs: {
-    chicken: { src: "/images/gamify/chicken.png", width: 32, height: 32, scaleSize: 60 },
+    chicken: { src: path + "/images/gamify/chicken.png", width: 32, height: 32, scaleSize: 60 },
   },
   transitions: {
-    end: { src: "/images/gamify/loading.jpg" },
+    end: { src: path + "/images/gamify/loading.jpg" },
   },
 };
 
@@ -81,7 +83,6 @@ function showDialogueBox(message, onClose) {
   box.style.borderRadius = '12px';
   box.style.fontSize = '1.2em';
   box.style.zIndex = 9999;
-  box.style.textAlign = 'center';
   box.innerText = message;
   document.body.appendChild(box);
 
@@ -102,11 +103,15 @@ let dialogueActive = false;
 function setupChickenInteraction(gameObjects) {
   const player = gameObjects.find(obj => obj.name === 'steve');
   const chicken = gameObjects.find(obj => obj.name === 'chicken');
-  if (!player || !chicken) return;
+  if (!player || !chicken) {
+    console.warn("Player or chicken not found in game objects.");
+    return;
+  }
+
+  console.log("Setup chicken interaction, player and chicken found.");
 
   // Check proximity each frame
   function checkProximity() {
-    // Use x/y or fallback to xPercentage/yPercentage if needed
     const px = player.x ?? (player.xPercentage * window.innerWidth);
     const py = player.y ?? (player.yPercentage * window.innerHeight);
     const cx = chicken.x ?? (chicken.xPercentage * window.innerWidth);
@@ -137,11 +142,20 @@ if (typeof window !== 'undefined') {
 // --- Platformer Level Class for GameControl ---
 class GameSetterOverworldLevel {
   constructor(gameEnv) {
-    // Assign config to this instance
     this.tag = 'OverworldPlatformer';
     this.assets = assets;
     this.objects = objects;
-    this.classes = objects; // <-- This is the key line!
+    this.classes = objects.map(obj => obj.class);  // FIXED: classes must be array of class constructors
+    this.continue = true;
+    console.log('GameSetterOverworldLevel created:', this);
+  }
+
+  create() {
+    console.log("Creating Overworld Platformer Level...");
+    if (typeof window !== 'undefined') {
+      const event = new CustomEvent('game-objects-ready', { detail: { objects: this.objects } });
+      window.dispatchEvent(event);
+    }
   }
 }
 
