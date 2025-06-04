@@ -1,25 +1,30 @@
-// GameSetHills.js Key objective is to define objects for a GameLevel
 import GameSet from './GameSet.js';
-// To build GameLevels, each contains GameObjects from below imports
-import Background from './Background.js'
+import BackgroundPlat from './PlatformerEngine/BackgroundPlat.js';
 
 // Define the assets
-const assets = {  
-  backgrounds: {
-    start: { src: "/images/platformer/backgrounds/home.png" },
-  },
+const assets = {
+    backgrounds: {
+        start: { src: "/images/platformer/backgrounds/home.png" },
+    },
 };
 
-// Hills Game Level defintion...
+// Hills Game Level definition...
 const objects = [
-  // GameObject(s), the order is important to z-index...
-  { name: 'start', id: 'background', class: Background, data: assets.backgrounds.start },
+    {
+        name: 'start',
+        id: 'background',
+        // Instead of directly referencing the class, use a getter function
+        get class() {
+            return BackgroundPlat;
+        },
+        data: assets.backgrounds.start
+    },
 ];
 
 const GameSetterStart = {
-  tag: 'Start',
-  assets: assets,
-  objects: objects
+    tag: 'Start',
+    assets: assets,
+    objects: objects
 };
 
 export default GameSetterStart;

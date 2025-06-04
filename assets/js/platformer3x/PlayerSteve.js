@@ -1,6 +1,6 @@
-import GameEnv from './GameEnv.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
 import Character from './Character.js';
-import GameControl from './GameControl.js';
+import GameControl from './PlatformerEngine/GameControl.js';
 
 /**
  * @class PlayerSteve class
@@ -24,7 +24,11 @@ export class PlayerSteve extends Character {
         isFinishing: false,
     };
 
-    constructor(canvas, image, data) {
+    constructor(data, gameEnv) {
+        const canvas = document.getElementById('gameCanvas');
+        const image = new window.Image();
+        image.src = data.src;
+
         super(canvas, image, data);
 
         // Steve-specific data

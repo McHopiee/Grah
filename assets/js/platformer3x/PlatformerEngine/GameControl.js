@@ -7,11 +7,10 @@
  * - call or add listener to GameControl.startTimer() to start the game timer.
  */
 import GameEnv from './GameEnv.js';
-import GameLevel from './GameLevel.js';
-import GameSetup from './GameSetup.js';
-import Socket from './Multiplayer.js';
-import PlayerZombie from './PlayerZombie.js';
-import SettingsControl from "./SettingsControl.js";
+import GameLevel from '../GameLevel.js';
+import GameSetup from '../GameSetup.js';
+import PlayerZombie from '../PlayerZombie.js';
+import SettingsControl from "../SettingsControl.js";
 
 /**
  * GameControl is a singleton object that controls the game loop.

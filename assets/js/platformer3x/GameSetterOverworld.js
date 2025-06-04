@@ -1,29 +1,28 @@
-// GameSetMinecraft.js
+// GameSetterOverworld.js
 
-import Background from './Background.js';
+import BackgroundPlat from './PlatformerEngine/BackgroundPlat.js';
 import BackgroundTransitions from './BackgroundTransitions.js';
 import Platform from './Platform.js';
-import PlayerMinecraft from './PlayerMinecraft.js';
+import PlayerSteve from './PlayerSteve.js';
 import BlockPlatform from './BlockPlatform.js';
-import SpawnPlatform from './PlatformSpawn.js';
 import MovingPlatform from './PlatformMoving.js';
 import Sword from './Sword.js';
 import Zombie from './EnemyZombie.js';
-import PigNPC from './PigNPC.js';
-import FinishLine from './FinishLine.js';
+import Chicken from './Chicken.js';
+import FinishLine from './FinishLine.js';  
 
 // ASSETS: Minecraft-style images
 const assets = {
   obstacles: {
-    grassBlock: { src: "/images/minecraft/grass_block.png" },
-    sword: { src: "/images/minecraft/sword.png" },
+    grassBlock: { src: "/images/gamify/grass_block.jpg" },
+    sword: { src: "/images/gamify/sword.jpg" },
   },
   backgrounds: {
-    overworld: { src: "/images/minecraft/overworld_background.png" },
+    overworld: { src: "/images/gamify/mcbackground.jpg" },
   },
   players: {
     steve: {
-      src: "/images/minecraft/steve.png",
+      src: "/images/gamify/steve.png",
       width: 32,
       height: 32,
       scaleSize: 60,
@@ -37,7 +36,7 @@ const assets = {
   },
   enemies: {
     zombie: {
-      src: "/images/minecraft/zombie.png",
+      src: "/images/gamify/zombie.png",
       width: 32,
       height: 32,
       scaleSize: 60,
@@ -45,46 +44,105 @@ const assets = {
     },
   },
   npcs: {
-    pig: { src: "/images/minecraft/pig.png", width: 32, height: 32, scaleSize: 60 },
+    chicken: { src: "/images/gamify/chicken.png", width: 32, height: 32, scaleSize: 60 },
   },
   transitions: {
-    end: { src: "/images/platformer/transitions/end.png" },
+    end: { src: "/images/gamify/loading.jpg" },
   },
 };
 
 // OBJECTS in the level
 const objects = [
-  { name: 'overworld', id: 'background', class: Background, data: assets.backgrounds.overworld },
-
-  // Main ground platform
+  { name: 'overworld', id: 'background', class: BackgroundPlat, data: assets.backgrounds.overworld },
   { name: 'ground', id: 'platform', class: Platform, data: assets.obstacles.grassBlock },
-
-  // Floating blocks
   { name: 'floating', id: 'jumpPlatform', class: BlockPlatform, data: assets.obstacles.grassBlock, xPercentage: 0.2, yPercentage: 0.7 },
   { name: 'floating', id: 'jumpPlatform', class: BlockPlatform, data: assets.obstacles.grassBlock, xPercentage: 0.3, yPercentage: 0.6 },
   { name: 'floating', id: 'jumpPlatform', class: BlockPlatform, data: assets.obstacles.grassBlock, xPercentage: 0.4, yPercentage: 0.5 },
-
-  // Sword pickup on one of the floating blocks
   { name: 'sword', id: 'sword', class: Sword, data: assets.obstacles.sword, xPercentage: 0.3, yPercentage: 0.55 },
-
-  // Moving zombie enemy
   { name: 'zombie', id: 'zombie', class: Zombie, data: assets.enemies.zombie, xPercentage: 0.5, minPosition: 0.1 },
-
-  // Player
-  { name: 'steve', id: 'player', class: PlayerMinecraft, data: assets.players.steve },
-
-  // Pig at end
-  { name: 'pig', id: 'npc', class: PigNPC, data: assets.npcs.pig, xPercentage: 0.9, yPercentage: 0.8 },
-
-  // Finish line at the pig
-  { name: 'finishline', id: 'finishline', class: FinishLine, data: assets.transitions.end, xPercentage: 0.9, yPercentage: 0.8 },
+  { name: 'steve', id: 'player', class: PlayerSteve, data: assets.players.steve },
+  { name: 'chicken', id: 'npc', class: Chicken, data: assets.npcs.chicken, xPercentage: 0.9, yPercentage: 0.8 },
+  { name: 'finish', id: 'finishline', class: FinishLine, data: assets.transitions.end, xPercentage: 0.95, yPercentage: 0.85 }
 ];
 
-// Game config
-const GameMinecraft = {
-  tag: 'MinecraftPlatformer',
-  assets: assets,
-  objects: objects
-};
+// --- Chicken Interaction Feature ---
 
-export default GameMinecraft;
+// Helper: Show dialogue box
+function showDialogueBox(message, onClose) {
+  let box = document.createElement('div');
+  box.id = 'dialogue-box';
+  box.style.position = 'fixed';
+  box.style.left = '50%';
+  box.style.top = '70%';
+  box.style.transform = 'translate(-50%, -50%)';
+  box.style.background = 'rgba(0,0,0,0.85)';
+  box.style.color = '#fff';
+  box.style.padding = '24px 32px';
+  box.style.borderRadius = '12px';
+  box.style.fontSize = '1.2em';
+  box.style.zIndex = 9999;
+  box.style.textAlign = 'center';
+  box.innerText = message;
+  document.body.appendChild(box);
+
+  function handleEscape(e) {
+    if (e.key === 'Escape') {
+      document.body.removeChild(box);
+      document.removeEventListener('keydown', handleEscape);
+      if (onClose) onClose();
+    }
+  }
+  document.addEventListener('keydown', handleEscape);
+}
+
+// Chicken interaction logic
+let nearChicken = false;
+let dialogueActive = false;
+
+function setupChickenInteraction(gameObjects) {
+  const player = gameObjects.find(obj => obj.name === 'steve');
+  const chicken = gameObjects.find(obj => obj.name === 'chicken');
+  if (!player || !chicken) return;
+
+  // Check proximity each frame
+  function checkProximity() {
+    // Use x/y or fallback to xPercentage/yPercentage if needed
+    const px = player.x ?? (player.xPercentage * window.innerWidth);
+    const py = player.y ?? (player.yPercentage * window.innerHeight);
+    const cx = chicken.x ?? (chicken.xPercentage * window.innerWidth);
+    const cy = chicken.y ?? (chicken.yPercentage * window.innerHeight);
+    nearChicken = Math.abs(px - cx) < 60 && Math.abs(py - cy) < 60 && !dialogueActive;
+    requestAnimationFrame(checkProximity);
+  }
+  checkProximity();
+
+  // Listen for 'e' key
+  document.addEventListener('keydown', function onE(e) {
+    if (e.key === 'e' && nearChicken && !dialogueActive) {
+      dialogueActive = true;
+      showDialogueBox("Bawk! You saved me! Thank you!", () => {
+        dialogueActive = false;
+      });
+    }
+  });
+}
+
+// After your game objects are created and added to the game, call this:
+if (typeof window !== 'undefined') {
+  window.addEventListener('game-objects-ready', (e) => {
+    setupChickenInteraction(e.detail.objects);
+  });
+}
+
+// --- Platformer Level Class for GameControl ---
+class GameSetterOverworldLevel {
+  constructor(gameEnv) {
+    // Assign config to this instance
+    this.tag = 'OverworldPlatformer';
+    this.assets = assets;
+    this.objects = objects;
+    this.classes = objects; // <-- This is the key line!
+  }
+}
+
+export default GameSetterOverworldLevel;

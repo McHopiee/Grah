@@ -1,9 +1,7 @@
 // SettingsControl.js key purpose is key/value management for game settings.
 import LocalStorage from "./LocalStorage.js";
-import GameEnv from "./GameEnv.js";
-import GameControl from "./GameControl.js";
-import Socket from "./Multiplayer.js";
-import Chat from "./Chat.js"
+import GameEnv from "./PlatformerEngine/GameEnv.js";
+import GameControl from "./PlatformerEngine/GameControl.js";
 import { enableLightMode, enableDarkMode } from './Document.js';
 
 

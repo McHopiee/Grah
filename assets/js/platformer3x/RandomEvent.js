@@ -1,5 +1,5 @@
 
-import GameControl from './GameControl.js';
+import GameControl from './PlatformerEngine/GameControl.js';
 
 function RandomEvent() {
 let randomNum = Math.floor(Math.random() * 8) + 3; // random num from 3 to 10 sec

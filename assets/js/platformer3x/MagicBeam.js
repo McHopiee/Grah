@@ -3,17 +3,22 @@ import GameEnv from './GameEnv.js';
 
 export class MagicBeam extends Character {
     // Constructor sets up Character object 
-    constructor(canvas, image, data, xPercentage, yPercentage, name, minPosition) {
+    constructor(data, gameEnv) {
+        const canvas = document.getElementById('gameCanvas');
+        const image = new window.Image();
+        image.src = data.src;
+
+        // Extract extra parameters from data if needed
+        const xPercentage = data.xPercentage ?? 0;
+        const yPercentage = data.yPercentage ?? 0;
+        const name = data.name ?? "MagicBeam";
+        const minPosition = data.minPosition ?? 0;
+
         super(canvas, image, data);
 
-        // Unused but must be defined
         this.name = name;
-
-        // Initial Position 
         this.x = xPercentage * GameEnv.innerWidth;
         this.yPercentage = yPercentage;
-
-        // Calculate initial Y position
         this.y = GameEnv.bottom * this.yPercentage;
         this.canvas.style.top = `${this.y}px`;
 
@@ -22,16 +27,18 @@ export class MagicBeam extends Character {
 
         this.immune = 0;
         GameEnv.destroyedMagicBeam = false;
-
+        this.speed = data.speed || 2;
+        this.canvasWidth = data.width || image.width || 100;
     }
 
     update() {
-        super.update();
+        if (super.update) super.update();
 
         // Check for boundaries
         if (this.x <= this.minPosition || (this.x + this.canvasWidth >= this.maxPosition)) {
             this.speed = -this.speed;
         }
+        this.x += this.speed;
         this.playerBottomCollision = false;
 
         this.y = GameEnv.bottom * this.yPercentage;
@@ -48,7 +55,9 @@ export class MagicBeam extends Character {
             shard.style.backgroundColor = '#FFD700'; // golden yellow color for the shards
             shard.style.left = `${this.x}px`;
             shard.style.top = `${this.y}px`;
-            this.canvas.parentElement.appendChild(shard); 
+            if (this.canvas.parentElement) {
+                this.canvas.parentElement.appendChild(shard); 
+            }
     
             const angle = Math.random() * 2 * Math.PI;
             const speed = Math.random() * 5 + 2;
@@ -72,16 +81,14 @@ export class MagicBeam extends Character {
         this.canvas.style.opacity = 0;
     }
     
-    
     // Player action on collisions
     collisionAction() {
         if (this.collisionData.touchPoints.other.id === "player") {
             if (this.collisionData.touchPoints.other.bottom && this.immune === 0) {
                 GameEnv.invincible = true;
                 GameEnv.goombaBounce1 = true;
-                this.explode()
+                this.explode();
 
-            
                 setTimeout(() => {
                     GameEnv.invincible = false;
                     this.destroy();

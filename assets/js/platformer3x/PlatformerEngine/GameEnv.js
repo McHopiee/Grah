@@ -84,20 +84,19 @@ export class GameEnv {
     static timerInterval = 10;
     static coinScore = 0;
     static time = 0;
-    static darkMode = true
+    static darkMode = true;
     static playerAttack = false;
 
     static playerChange = false;
 
-    static claimedCoinIds = []
+    static claimedCoinIds = [];
 
-    
     // Make the constructor throws an error, or effectively make it a private constructor.
     constructor() {
         throw new Error('GameEnv is a static class and cannot be instantiated.');
     }
   
-     /**
+    /**
      * Setter for Top position, called by initialize in GameEnv
      * @static
      */
@@ -106,6 +105,8 @@ export class GameEnv {
         const header = document.querySelector('header');
         if (header) {
             this.top = header.offsetHeight;
+        } else {
+            this.top = 0;
         }
     }
   
@@ -115,8 +116,7 @@ export class GameEnv {
      */
     static setBottom() {
         // sets the bottom or gravity 0
-        this.bottom =
-        this.top + this.backgroundHeight;
+        this.bottom = this.top + (this.backgroundHeight || 0);
     }
   
     /**
@@ -144,7 +144,9 @@ export class GameEnv {
   
         // Call the sizing method on all game objects
         for (var gameObject of GameEnv.gameObjects){
-            gameObject.size();
+            if (typeof gameObject.size === "function") {
+                gameObject.size();
+            }
         }
     }
   
@@ -153,13 +155,12 @@ export class GameEnv {
      * @static
      */
     static update() {
-        // Update game state, including all game objects
-        // if statement prevents game from updating upon player death
-        if (GameEnv.player === null || GameEnv.player.state.isDying === false) {
+        // Only update if player is not dying
+        if (GameEnv.player === null || GameEnv.player.state?.isDying === false) {
             for (const gameObject of GameEnv.gameObjects) {
-                gameObject.update();
-                gameObject.serialize();
-                gameObject.draw();
+                if (typeof gameObject.update === "function") gameObject.update();
+                if (typeof gameObject.serialize === "function") gameObject.serialize();
+                if (typeof gameObject.draw === "function") gameObject.draw();
             } 
         }
     }
@@ -172,7 +173,9 @@ export class GameEnv {
         // Destroy objects in reverse order
         for (var i = GameEnv.gameObjects.length - 1; i >= 0; i--) {
             const gameObject = GameEnv.gameObjects[i];
-            gameObject.destroy();
+            if (typeof gameObject.destroy === "function") {
+                gameObject.destroy();
+            }
         }
         GameEnv.gameObjects = [];
     }
@@ -183,28 +186,33 @@ export class GameEnv {
      */
     static setInvert() {
         for (var gameObject of GameEnv.gameObjects){
-            if (gameObject.invert && !this.isInverted) {  // toggle off
-                gameObject.canvas.style.filter = "none";  // remove filter
-            } else if (gameObject.invert && this.isInverted) { // toggle on
-                gameObject.canvas.style.filter = "invert(100%)";  // remove filter
+            if (gameObject.invert && !this.isInverted) {
+                gameObject.canvas.style.filter = "none";
+            } else if (gameObject.invert && this.isInverted) {
+                gameObject.canvas.style.filter = "invert(100%)";
             } else {
-                gameObject.canvas.style.filter = "none";  // remove filter
+                gameObject.canvas.style.filter = "none";
             }
         }
     }
-  
-    static PlayerPosition() {
-      let playerX = 0;
-      let playerY = 0;
-    }
+
+    static PlayerPosition = {
+      playerX: 0,
+      playerY: 0
+    };
 
     // Play a sound by its ID
     static playSound(id) {
         const sound = document.getElementById(id);
-        sound.play();
+        if (sound) sound.play();
     }
 
     static updateParallaxDirection(key) {
+        // keys is not defined in this scope, so let's use the player's pressedKeys if available
+        let keys = [];
+        if (GameEnv.player && GameEnv.player.pressedKeys) {
+            keys = Object.keys(GameEnv.player.pressedKeys);
+        }
         switch (key) {
             case "a":
                 if (GameEnv.player?.x > 2) {
@@ -218,12 +226,10 @@ export class GameEnv {
                 break;
             case "s":
                 if (keys.includes("a") && keys.includes("s")) {
-                // If both "a" and "s" are clicked
                     if (GameEnv.player?.x > 2) {
-                    GameEnv.backgroundDirection = -5;
+                        GameEnv.backgroundDirection = -5;
                     }
                 } else if (keys.includes("d") && keys.includes("s")) {
-                // If both "d" and "s" are clicked
                     if (GameEnv.player?.x < (GameEnv.innerWidth - 2)) {
                         GameEnv.backgroundDirection = 5;
                     }
@@ -236,6 +242,6 @@ export class GameEnv {
                 break;
         }
     }
-  }
+}
   
-  export default GameEnv;
+export default GameEnv;

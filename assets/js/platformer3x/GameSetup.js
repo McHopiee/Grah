@@ -1,15 +1,14 @@
 
 // GameSehup.js Key objective is to define GameLevel objects and their assets.
-import GameEnv from './GameEnv.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
 import GameLevel from './GameLevel.js';
 // To build GameLevels, each contains GameObjects from below imports
-import Background from './Background.js'
-import GameControl from './GameControl.js';
+import BackgroundPlat from './PlatformerEngine/BackgroundPlat.js'
+import GameControl from './PlatformerEngine/GameControl.js';
 import GameSet from './GameSet.js';
 import GameSetterStart from './GameSetterStart.js';
-import GameSetterHills from './GameSetterHills.js';
-import GameSetterWater from './GameSetterWater.js';
 import GameSetterEnd from './GameSetterEnd.js';
+import GameSetterOverworld from './GameSetterOverworld.js';
 //test comment
 
 /* Coding Style Notes
@@ -219,8 +218,7 @@ const GameSetup = {
     // Start Game
     GameLevelSetup(GameSetterStart, this.path, this.homeScreenCallback, true);
     // Game Levels added to the Game ...
-    GameLevelSetup(GameSetterHills, this.path, this.playerOffScreenCallBack);
-    GameLevelSetup(GameSetterWater, this.path, this.playerOffScreenCallBack);
+    GameLevelSetup(GameSetterOverworld, this.path, this.playerOffScreenCallBack);
     // End Game
     GameLevelSetup(GameSetterEnd, this.path, this.gameOverCallBack, true);
 

@@ -1,25 +1,36 @@
-import GameControl from './GameControl.js';
-import GameEnv from './GameEnv.js';
+import GameControl from './PlatformerEngine/GameControl.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
 import JumpPlatform from './PlatformJump.js';
 
 export class BossItem extends JumpPlatform {
-    constructor(canvas, image, data, xPercentage, yPercentage, name) {
+    constructor(data, gameEnv) {
+        const canvas = document.getElementById('gameCanvas');
+        const image = new window.Image();
+        image.src = data.src;
+
+        // Extract extra parameters from data if needed
+        const xPercentage = data.xPercentage ?? 0;
+        const yPercentage = data.yPercentage ?? 0;
+        const name = data.name ?? "BossItem";
+
+        // Only pass extra args if JumpPlatform expects them, otherwise just (canvas, image, data)
         super(canvas, image, data, xPercentage, yPercentage, name);
+
+        this.relativeX = ""; // used for the item block's spritesheet.
     }
 
     // Required, but no update action
     update() {
-        super.update();
+        if (super.update) super.update();
     }
 
     collisionAction() {
-        //collision only detects mario and it only applies to the item block
+        // collision only detects mario and it only applies to the item block
         if (this.collisionData.touchPoints.other.id === "player" && this.name === "itemBlock") {
             if (this.relativeX === 0 || this.relativeX === this.canvas.width) {
                 if (this.relativeX === 0) {
                     GameControl.startRandomEvent("zombie");
-                    //console.log("randomEventtriggered", GameControl.randomEventId);
-                };
+                }
                 this.relativeX = -1 * this.canvas.width;
             } else if (this.relativeX === "") {
                 this.relativeX = 0;
@@ -29,16 +40,20 @@ export class BossItem extends JumpPlatform {
 
     // Set platform position
     size() {
-        super.size();
-
+        if (super.size) super.size();
     }
 
     // Draw position is always 0,0
     draw() {
-        if(!GameEnv.playerChange){
-            this.ctx.drawImage(this.image, this.relativeX, 0, this.canvas.width / this.data.widthRatio, this.canvas.height / this.data.heightRatio);
-        }
-        else{
+        if (!GameEnv.playerChange) {
+            this.ctx.drawImage(
+                this.image,
+                this.relativeX,
+                0,
+                this.canvas.width / (this.data.widthRatio || 1),
+                this.canvas.height / (this.data.heightRatio || 1)
+            );
+        } else {
             this.destroy();
         }
     }

@@ -1,23 +1,26 @@
-import GameEnv from "./GameEnv.js";
-import GameObject from "./GameObject.js";
+import GameEnv from "./PlatformerEngine/GameEnv.js";
+import GamePlatformerObject from "./GamePlatformerObject.js";
 
-export class Sword extends GameObject {
-  constructor(canvas, image, data) {
+export class Sword extends GamePlatformerObject {
+  constructor(data, gameEnv) {
+    const canvas = document.getElementById('gameCanvas');
+    const image = new window.Image();
+    image.src = data.src;
+
     super(canvas, image, data);
     this.isCollected = false;
   }
 
   update() {
-    super.update();
-
-    if (!this.isCollected && this.checkCollision(GameEnv.player)) {
+    // No need to call super.update() unless you have logic there
+    if (!this.isCollected && GameEnv.player && this.checkCollision(GameEnv.player)) {
       this.pickUp();
     }
   }
 
   /**
    * Checks for collision with the player.
-   * @param {GameObject} player - The player instance to check collision against.
+   * @param {GamePlatformerObject} player - The player instance to check collision against.
    * @returns {boolean} True if colliding, false otherwise.
    */
   checkCollision(player) {
@@ -34,19 +37,29 @@ export class Sword extends GameObject {
    */
   pickUp() {
     this.isCollected = true;
-    GameEnv.player.hasSword = true;
-
-    // You could remove the sword from the game world, hide it, or change its state.
+    if (GameEnv.player) {
+      GameEnv.player.hasSword = true;
+    }
+    this.hide();
     this.destroy();
+  }
+
+  hide() {
+    if (this.canvas) {
+      this.canvas.style.display = 'none';
+    }
   }
 
   destroy() {
     // Remove sword from gameObjects list in GameEnv (or wherever you track game objects)
-    if (GameEnv.gameObjects.includes(this)) {
-      const index = GameEnv.gameObjects.indexOf(this);
+    const index = GameEnv.gameObjects.indexOf(this);
+    if (index !== -1) {
       GameEnv.gameObjects.splice(index, 1);
     }
-    super.destroy();
+    // Remove canvas from DOM safely
+    if (this.canvas && this.canvas.parentNode) {
+      this.canvas.parentNode.removeChild(this.canvas);
+    }
   }
 }
 

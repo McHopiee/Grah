@@ -1,34 +1,34 @@
-import GameEnv from './GameEnv.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
 import PlayerBase from './PlayerBase.js';
-import GameControl from './GameControl.js';
+import GameControl from './PlatformerEngine/GameControl.js';
 import hpBar from './hpBar.js';
+
 /**
- * @class PlayerHills class
- * @description PlayerHills.js key objective is to eent the user-controlled character in the game.
- *
- * The Player class extends the Character class, which in turn extends the GameObject class.
- * Animations and events are activated by key presses, collisions, and gravity.
- * WASD keys are used by user to control The Player object.
- *
+ * @class PlayerGreece class
+ * @description PlayerGreece handles the user-controlled character in the Greece level.
  * @extends PlayerBase
  */
 export class PlayerGreece extends PlayerBase {
-    /** GameObject instantiation: constructor for PlayerHills object
-     * @extends Character
-     * @param {HTMLCanvasElement} canvas - The canvas element to draw the player on.
-     * @param {HTMLImageElement} image - The image to draw the player with.
+    /** GameObject instantiation: constructor for PlayerGreece object
      * @param {Object} data - The data object containing the player's properties.
+     * @param {Object} gameEnv - The game environment object.
      */
-    constructor(canvas, image, data) {
+    constructor(data, gameEnv) {
+        const canvas = document.getElementById('gameCanvas');
+        const image = new window.Image();
+        image.src = data.src;
+
         super(canvas, image, data);
-        // Goomba variables, deprecate?
+
         this.timer = false;
         GameEnv.invincible = false; // Player is not invincible
-        //Hp Bar
+
+        // Hp Bar
         this.maxHp = 99; // Maximum health points
         this.currentHp = 99; // Current health points
-        this.hpBar = new hpBar(100, 15, this.canvasWidth, this.canvasHeight, this.maxHp, this.currentHp, this.x, this.y)
+        this.hpBar = new hpBar(100, 15, this.canvasWidth, this.canvasHeight, this.maxHp, this.currentHp, this.x, this.y);
     }
+
     /**
      * @override
      * gameLoop helper: Update Player jump height, replaces PlayerBase updateJump using settings from GameEnv

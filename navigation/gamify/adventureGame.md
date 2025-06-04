@@ -6,7 +6,7 @@ permalink: /gamify/adventureGame
 
 <div id="gameContainer">
     <div id="promptDropDown" class="promptDropDown" style="z-index: 9999"></div>
-    <canvas id='gameCanvas'></canvas>
+    <canvas id="gameCanvas"></canvas>
 </div>
 
 <div id="conversationPanel" style="display: none; position: absolute; top: 20%; left: 20%; width: 60%; background: rgba(0, 0, 0, 0.8); color: white; padding: 20px; border-radius: 10px;">
@@ -17,5 +17,6 @@ permalink: /gamify/adventureGame
 <script type="module">
     import GameControl from '{{site.baseurl}}/assets/js/adventureGame/GameControl.js';
     const path = "{{site.baseurl}}";
-    new GameControl(path).start();
+    window.gameControl = new GameControl(path);
+    window.gameControl.start();
 </script>

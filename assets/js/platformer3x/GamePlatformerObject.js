@@ -1,9 +1,11 @@
-import GameEnv from './GameEnv.js';
-import Socket from './Multiplayer.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
 
-class GameObject {
+class GamePlatformerObject {
     // container for all game objects in game
     constructor(canvas, image, data) {
+        if (!canvas || typeof canvas.getContext !== "function") {
+            throw new Error('GamePlatformerObject: Provided canvas is invalid or not found.');
+        }
         this.x = 0;
         this.y = 0;
         this.frame = 0;
@@ -116,8 +118,10 @@ class GameObject {
     destroy() {
         const index = GameEnv.gameObjects.indexOf(this);
         if (index !== -1) {
-            // Remove the canvas from the DOM
-            this.canvas.parentNode.removeChild(this.canvas);
+            // Remove the canvas from the DOM, if it exists and has a parent
+            if (this.canvas && this.canvas.parentNode) {
+                this.canvas.parentNode.removeChild(this.canvas);
+            }
             GameEnv.gameObjects.splice(index, 1);
         }
     }
@@ -221,4 +225,4 @@ class GameObject {
     
 }
 
-export default GameObject;
+export default GamePlatformerObject;

@@ -1,4 +1,4 @@
-import GameEnv from './GameEnv.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
 
 class GameSet {
     constructor(assets, gameObjects, path) {

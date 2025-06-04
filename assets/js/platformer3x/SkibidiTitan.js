@@ -1,22 +1,32 @@
 import Character from './Character.js';
-import GameEnv from './GameEnv.js';
-import GameControl from './GameControl.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
+import GameControl from './PlatformerEngine/GameControl.js';
 import Laser from './Laser.js';
 var debounce = 0;
 
 export class skibidiTitan extends Character {
-    // constructors sets up Character object 
-    constructor(canvas, image, data, xPercentage, yPercentage, name, minPosition){
+    // constructor sets up Character object 
+    constructor(data, gameEnv) {
+        const canvas = document.getElementById('gameCanvas');
+        const image = new window.Image();
+        image.src = data.src;
+
+        // Extract extra parameters from data if needed
+        const xPercentage = data.xPercentage ?? 0;
+        const yPercentage = data.yPercentage ?? 0;
+        const name = data.name ?? "skibidiTitan";
+        const minPosition = data.minPosition ?? 0;
+
         super(canvas, image, data);
 
-        //Unused but must be Defined
+        // Unused but must be Defined
         this.name = name;
         this.y = yPercentage;
 
-        //Initial Position of Goomba
+        // Initial Position of Goomba
         this.x = xPercentage * GameEnv.innerWidth;
 
-        //Access in which a Goomba can travel    
+        // Access in which a Goomba can travel    
         this.minPosition = minPosition * GameEnv.innerWidth;
         this.maxPosition = this.x + xPercentage * GameEnv.innerWidth;
 

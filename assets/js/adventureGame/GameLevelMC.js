@@ -3,7 +3,8 @@ import Background from './Background.js';
 import Player from './Player.js';
 import Npc from './Npc.js';
 import GameControl from './GameControl.js';
-import Creeper from './Creeper.js'; // Import the Creeper class
+import Creeper from './Creeper.js';
+import GameSetterOverworldLevel from '../platformer3x/GameSetterOverworld.js'; // updated import
 
 class GameLevelMC {
   constructor(gameEnv) {
@@ -11,6 +12,7 @@ class GameLevelMC {
     let height = gameEnv.innerHeight;
     let path = gameEnv.path;
 
+    // Background image info
     const image_src_main = path + "/images/gamify/maine_RPG.png";
     const image_data_main = {
       name: 'main',
@@ -19,6 +21,7 @@ class GameLevelMC {
       pixels: { height: 320, width: 480 }
     };
 
+    // Player sprite info
     const sprite_src_player = path + "/images/gamify/steve.png";
     const PLAYER_SCALE_FACTOR = 5;
     const sprite_data_player = {
@@ -43,6 +46,7 @@ class GameLevelMC {
       keypress: { up: 87, left: 65, down: 83, right: 68 }
     };
 
+    // Creeper sprite info with movement and animation
     const sprite_src_creeper = path + "/images/gamify/creepa.png";
     const sprite_greet_creeper = "KABOOM!!";
     const sprite_data_creeper = {
@@ -104,7 +108,10 @@ class GameLevelMC {
         this.isAnimating = true;
 
         const spriteElement = document.getElementById(this.id);
-        if (!spriteElement) return;
+        if (!spriteElement) {
+          this.isAnimating = false;
+          return;
+        }
 
         this.sound.play();
 
@@ -129,6 +136,7 @@ class GameLevelMC {
       sprite_data_creeper.playAnimation();
     }, 5000);
 
+    // Villager sprite info and interaction
     const sprite_src_villager = path + "/images/gamify/villager.png";
     const sprite_greet_villager = "Aur aur aur";
     const sprite_data_villager = {
@@ -142,18 +150,57 @@ class GameLevelMC {
       orientation: { rows: 1, columns: 1 },
       down: { row: 0, start: 0, columns: 1 },
       hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
+
       reaction: function () {
         alert(sprite_greet_villager);
+      },
+
+      interact: async function () {
+        if (confirm("Would you like to play the platformer challenge?")) {
+          window.dispatchEvent(new CustomEvent('loadPlatformer'));
+        }
       }
     };
+
+    setTimeout(() => {
+      function checkProximityAndListen() {
+        const dx = (sprite_data_player.INIT_POSITION.x || 0) - (sprite_data_villager.INIT_POSITION.x || 0);
+        const dy = (sprite_data_player.INIT_POSITION.y || 0) - (sprite_data_villager.INIT_POSITION.y || 0);
+        const near = Math.abs(dx) < 100 && Math.abs(dy) < 100;
+
+        if (near) {
+          function onE(e) {
+            if (e.key.toLowerCase() === 'e') {
+              sprite_data_villager.interact();
+              document.removeEventListener('keydown', onE);
+            }
+          }
+          document.addEventListener('keydown', onE);
+        } else {
+          setTimeout(checkProximityAndListen, 300);
+        }
+      }
+      checkProximityAndListen();
+    }, 1000);
 
     this.classes = [
       { class: Background, data: image_data_main },
       { class: Player, data: sprite_data_player },
       { class: Npc, data: sprite_data_villager },
       { class: Creeper, data: sprite_data_creeper },
-      { class: GameControl, data: {} } // Example: include GameControl
+      { class: GameControl, data: {} }
     ];
+
+    // ⚡ Listen for platformer start event (assumes global gameControl)
+    window.addEventListener('loadPlatformer', () => {
+      if (window.gameControl) {
+        window.gameControl.levelClasses = [GameSetterOverworldLevel]; // updated to use the class
+        window.gameControl.currentLevelIndex = 0;
+        window.gameControl.restartLevel();
+      } else {
+        alert("Error: gameControl not found for platformer transition.");
+      }
+    });
   }
 }
 

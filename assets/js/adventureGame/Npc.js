@@ -34,10 +34,15 @@ class Npc extends Character {
     }
 
     handleKeyInteract() {
+        if (!this.gameEnv || !this.gameEnv.gameObjects) return;
+
         const players = this.gameEnv.gameObjects.filter(
-            obj => obj.state.collisionEvents.includes(this.spriteData.id)
+            obj =>
+                obj.state &&
+                Array.isArray(obj.state.collisionEvents) &&
+                obj.state.collisionEvents.includes(this.spriteData.id)
         );
-        const hasInteract = this.interact !== undefined;
+        const hasInteract = typeof this.interact === "function";
 
         if (players.length > 0 && hasInteract) {
             this.interact();

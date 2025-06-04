@@ -1,6 +1,5 @@
 // GameLevel.js key objective is to load and intialize GameObject(s) for a level.
-import GameEnv from './GameEnv.js';
-import Socket from './Multiplayer.js';
+import GameEnv from './PlatformerEngine/GameEnv.js';
 import Character from './Character.js';
 
 /**
@@ -34,26 +33,30 @@ class GameLevel {
      * If any image fails to load, an error is logged and the game is halted.
      */
     async load() {
-        Socket.removeAllListeners("stateUpdate") //reset Socket Connections
-        Socket.removeAllListeners("disconnection")
-        Socket.removeAllListeners("leaderboardUpdate")
+        Socket.removeAllListeners("stateUpdate"); //reset Socket Connections
+        Socket.removeAllListeners("disconnection");
+        Socket.removeAllListeners("leaderboardUpdate");
         // Socket.createListener("leaderboardUpdate",this.handleLeaderboardUpdates)
         // Socket.createListener("stateUpdate",this.handleStateUpdates)
-        Socket.createListener("disconnection",this.handleSocketDisconnect)
+        Socket.createListener("disconnection",this.handleSocketDisconnect);
         try {
             var objFile = null;
             for (const obj of this.gameObjects) {
                 if (obj.data.file) {
-                    // Load the image for the game object.
-                    objFile = obj.data.file; 
+                    objFile = obj.data.file;
                     console.log(objFile);
                     obj.image = await this.loadImage(obj.data.file);
-                    // Create a new canvas for the game object.
-                    const canvas = document.createElement("canvas");
-                    canvas.id = obj.id;
-                    document.querySelector("#canvasContainer").appendChild(canvas);
-                    // Create a new instance of the game object.
-                    new obj.class(canvas, obj.image, obj.data, obj.xPercentage, obj.yPercentage, obj.name, obj.minPosition);
+
+                    // The new pattern: let the object create its own canvas and image
+                    // Remove any manual canvas/image assignment here
+
+                    // Instantiate the object (constructor will handle canvas/image)
+                    const instance = new obj.class(obj.data, GameEnv);
+
+                    // Optionally, add to GameEnv.gameObjects if needed for game loop
+                    if (GameEnv.gameObjects && !GameEnv.gameObjects.includes(instance)) {
+                        GameEnv.gameObjects.push(instance);
+                    }
                 }
             }
         } catch (error) {
