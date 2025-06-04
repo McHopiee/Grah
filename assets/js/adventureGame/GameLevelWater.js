@@ -1,4 +1,4 @@
-import GameEnvBackground from './GameEnvBackground.js';
+import Background from './Background.js';
 import Npc from './Npc.js';
 import Player from './Player.js';
 import GameControl from './GameControl.js';
@@ -58,7 +58,7 @@ class GameLevelWater {
       hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
       interact: function () {
         let primaryGame = gameEnv.gameControl;
-        let levelArray = [GameLevelStarWars];
+        let levelArray = [GameLevelBasement];
         let gameInGame = new GameControl(path, levelArray);
         primaryGame.pause();
         gameInGame.start();
@@ -88,14 +88,10 @@ class GameLevelWater {
       },
       speed: 10,
       direction: { x: 1, y: 1 },
-      sound: new Audio(path + "/assets/audio/shark.mp3"),
+      sound: new Audio(path + "/sounds/shark.mp3"),
       updatePosition: function () {
-        this.walkingArea.xMax = gameEnv.innerWidth - 100;
-        this.walkingArea.yMax = gameEnv.innerHeight / 4;
-
         this.INIT_POSITION.x += this.direction.x * this.speed;
         this.INIT_POSITION.y += this.direction.y * this.speed;
-
         if (this.INIT_POSITION.x <= this.walkingArea.xMin) {
           this.INIT_POSITION.x = this.walkingArea.xMin;
           this.direction.x = 1;
@@ -112,7 +108,6 @@ class GameLevelWater {
           this.INIT_POSITION.y = this.walkingArea.yMax;
           this.direction.y = -1;
         }
-
         const spriteElement = document.getElementById(this.id);
         if (spriteElement) {
           spriteElement.style.transform = this.direction.x === -1 ? "scaleX(-1)" : "scaleX(1)";
@@ -177,7 +172,7 @@ class GameLevelWater {
 
     const sprite_src_puffer = path + "/images/gamify/puffer.png";
     const sprite_data_puffer = {
-      id: 'Pufferfish',
+      id: 'Pufferish',
       greeting: "Enemy Pufferfish",
       src: sprite_src_puffer,
       SCALE_FACTOR: 5,
@@ -193,29 +188,61 @@ class GameLevelWater {
       id: 'Goldfish',
       greeting: "Enemy Goldfish",
       src: sprite_src_gold,
-      SCALE_FACTOR: 4,
-      ANIMATION_RATE: 15,
-      pixels: { height: 120, width: 240 },
-      INIT_POSITION: { x: width / 2, y: height / 2 },
+      SCALE_FACTOR: 5,
+      ANIMATION_RATE: 10,
+      pixels: { height: 100, width: 200 },
       orientation: { rows: 1, columns: 2 },
       down: { row: 0, start: 0, columns: 2 },
       hitbox: { widthPercentage: 0.25, heightPercentage: 0.55 }
     };
 
-    // Setup environment
-    const background = new GameEnvBackground(image_data_water);
-    const player = new Player(sprite_data_octopus);
-    const javaPortal = new Npc(sprite_data_nomad);
-    const shark = new Shark(sprite_data_shark);
-    const puffer = new Pufferfish(sprite_data_puffer);
-    const goldfish = new Goldfish(sprite_data_gold);
+    // Updated setupRandomMotion to ensure no clipping off-screen
+    function setupRandomMotion(spriteData, yOffset = 0) {
+      spriteData.direction = { x: Math.random() < 0.5 ? -1 : 1 };
+      spriteData.speed = 5;
+      const spriteWidth = spriteData.pixels.width / spriteData.SCALE_FACTOR;
 
-    gameEnv.setBackground(background);
-    gameEnv.addPlayer(player);
-    gameEnv.addNpc(javaPortal);
-    gameEnv.addEnemy(shark);
-    gameEnv.addEnemy(puffer);
-    gameEnv.addEnemy(goldfish);
+      spriteData.INIT_POSITION = {
+        x: Math.random() * (width - spriteWidth),
+        y: height / 2 + yOffset
+      };
+
+      setInterval(() => {
+        spriteData.INIT_POSITION.x += spriteData.direction.x * spriteData.speed;
+
+        if (spriteData.INIT_POSITION.x < 0) {
+          spriteData.INIT_POSITION.x = 0;
+          spriteData.direction.x = 1;
+        }
+        if (spriteData.INIT_POSITION.x > width - spriteWidth) {
+          spriteData.INIT_POSITION.x = width - spriteWidth;
+          spriteData.direction.x = -1;
+        }
+
+        if (Math.random() < 0.03) {
+          spriteData.direction.x *= -1;
+        }
+
+        const spriteElement = document.getElementById(spriteData.id);
+        if (spriteElement) {
+          spriteElement.style.transform = spriteData.direction.x === -1 ? "scaleX(-1)" : "scaleX(1)";
+          spriteElement.style.left = spriteData.INIT_POSITION.x + 'px';
+          spriteElement.style.top = spriteData.INIT_POSITION.y + 'px';
+        }
+      }, 100);
+    }
+
+    setupRandomMotion(sprite_data_puffer, 0);
+    setupRandomMotion(sprite_data_gold, 100);
+
+    this.classes = [
+      { class: Background, data: image_data_water },
+      { class: Player, data: sprite_data_octopus },
+      { class: Npc, data: sprite_data_nomad },
+      { class: Shark, data: sprite_data_shark },
+      { class: Pufferfish, data: sprite_data_puffer },
+      { class: Goldfish, data: sprite_data_gold },
+    ];
   }
 }
 

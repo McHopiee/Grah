@@ -19,12 +19,15 @@ class GameLevel {
             if (!gameObjectClass.data) gameObjectClass.data = {};
             let gameObject = new gameObjectClass.class(gameObjectClass.data, this.gameEnv);
 
-            // Provide default no-op update and resize methods if missing
+            // Provide default no-op methods if missing
             if (typeof gameObject.update !== "function") {
                 gameObject.update = () => {};
             }
             if (typeof gameObject.resize !== "function") {
                 gameObject.resize = () => {};
+            }
+            if (typeof gameObject.destroy !== "function") {
+                gameObject.destroy = () => {};
             }
 
             this.gameEnv.gameObjects.push(gameObject);
