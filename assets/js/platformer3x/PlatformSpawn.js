@@ -1,18 +1,9 @@
 import GameEnv from './GameEnv.js';
-import GamePlatformerObject from './GamePlatformerObject.js';
+import GameObject from './GameObject.js';
 
-export class SpawnPlatform extends GamePlatformerObject {
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        image.src = data.src;
-
-        // Use xPercentage and yPercentage from data if present, else default to 0
-        const xPercentage = data.xPercentage ?? 0;
-        const yPercentage = data.yPercentage ?? 0;
-
+export class SpawnPlatform extends GameObject {
+    constructor(canvas, image, data, xPercentage, yPercentage) {
         super(canvas, image, data);
-
         this.platformX = xPercentage * GameEnv.innerWidth;
         this.platformY = yPercentage;
         this.direction = 1;
@@ -24,26 +15,33 @@ export class SpawnPlatform extends GamePlatformerObject {
         this.canvas.style.boxShadow = "0 0 10px 5px rgba(0, 255, 255, 0.7)";
     }
 
+    // Required, but no update action
     update() {
-        // Only show platform if destroyedChocoFrog is true
-        this.canvas.style.visibility = GameEnv.destroyedChocoFrog ? 'visible' : 'hidden';
-    }
+        // .log(this.platformY);
+        this.canvas.style.visibility = 'hidden';
+        if (GameEnv.destroyedChocoFrog === true) {
+            this.canvas.style.visibility = 'visible';
+        }
+          }
 
+    // Draw position is always 0,0
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.image, 0, 0, this.canvas.width, this.canvas.height);
     }
 
+    // Set platform position
     size() {
         // Formula for Height should be on constant ratio, using a proportion of 832
         const scaledHeight = GameEnv.innerWidth * (1/27);
-        const scaledWidth = scaledHeight;
+        const scaledWidth = scaledHeight;  // width of jump platform is 1/10 of height
         const platformX = this.platformX;
         const platformY = (GameEnv.bottom - scaledHeight) * this.platformY;
         // set variables used in Display and Collision algorithms
         this.bottom = platformY;
         this.collisionHeight = scaledHeight;
         this.collisionWidth = scaledWidth;
+        //this.canvas.width = this.width;
+        //this.canvas.height = this.height;
         this.canvas.style.width = `${scaledWidth}px`;
         this.canvas.style.height = `${scaledHeight}px`;
         this.canvas.style.position = 'absolute';

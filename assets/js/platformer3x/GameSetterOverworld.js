@@ -1,162 +1,135 @@
 // GameSetterOverworld.js
-
-import BackgroundPlat from './PlatformerEngine/BackgroundPlat.js';
+// Key objective is to define objects for a Minecraft-themed GameLevel
+import GameSet from './GameSet.js';
+// To build GameLevels, each contains GameObjects from below imports
+import BackgroundParallax from './BackgroundParallax.js';
 import BackgroundTransitions from './BackgroundTransitions.js';
 import Platform from './Platform.js';
-import PlayerSteve from './PlayerSteve.js';
-import BlockPlatform from './BlockPlatform.js';
+import JumpPlatform from './PlatformJump.js';
+import PlayerOverworld from './PlayerOverworld.js';
+import Creeper from './EnemyCreeper.js';
+import Enderman from './EnemyEnderman.js';
 import MovingPlatform from './PlatformMoving.js';
-import Sword from './Sword.js';
-import Zombie from './EnemyZombie.js';
-import Chicken from './Chicken.js';
-import FinishLine from './FinishLine.js';  
+import Coin from './Coin.js';          // Could be replaced with Minecraft collectible like emeralds
+import FinishLine from './FinishLine.js';
+import BlockPlatform from './BlockPlatform.js';
 
-const path = "/Grah_Blog"
-
-// ASSETS: Minecraft-style images
-const assets = {
+// Define the GameSetup object literal with Minecraft-themed assets
+const assets = {  
   obstacles: {
-    grassBlock: { src: path + "/images/gamify/grass_block.jpg" },
-    sword: { src: path + "/images/gamify/sword.jpg" },
+    tube: { 
+      src: "/images/gamify/nether.png",
+      hitbox: { widthPercentage: 0.5, heightPercentage: 0.5},
+      width: 300,
+      height: 300,
+      scaleSize: 100,
+    },
+    coin: { 
+      src: "/images/gamify/emerald.png" 
+    },
+  },
+  platforms: {
+    grass: { src: "/images/gamify/grass_block.png" },
+    bricks: { src: "/images/gamify/stone_bricks.png" },
+    block: { src: "/images/gamify/stone_block.png" }, 
+    itemBlock: {
+      src: "/images/gamify/chest.png",
+      sizeRatio: 83.2,
+      widthRatio: 0.5,
+      heightRatio: 1.0,
+      width: 204,
+      height: 204,
+      scaleSize: 80,
+      speedRatio: 0.7,
+      hitbox: { widthPercentage: 0.4, heightPercentage: -0.2 }
+    }
   },
   backgrounds: {
-    overworld: { src: path + "/images/gamify/mcbackground.jpg" },
+    mountains: { src: "/images/gamify/taiga.png", parallaxSpeed: 0.1, moveOnKeyAction: true },
+    clouds: { src: "/images/gamify/mcclouds.png", parallaxSpeed: 0.5 },
+  },
+  transitions: {
+    loading: { src: "/images/gamify/loading.png" },
   },
   players: {
-    steve: {
-      src: path + "/images/gamify/steve.png",
-      width: 32,
-      height: 32,
-      scaleSize: 60,
+    overworld: {
+      src: "/images/minecraft/sprites/steveTwo.png",
+      width: 256,
+      height: 256,
+      scaleSize: 80,
       speedRatio: 0.7,
-      idle: { left: { row: 1, frames: 0 }, right: { row: 2, frames: 0 } },
-      walk: { left: { row: 1, frames: 5 }, right: { row: 2, frames: 5 } },
-      run: { left: { row: 1, frames: 5 }, right: { row: 2, frames: 5 } },
-      jump: { left: { row: 1, frames: 0 }, right: { row: 2, frames: 0 } },
+      idle: {
+        left: { row: 1, frames: 15 },
+        right: { row: 0, frames: 15 },
+      },
+      walk: {
+        left: { row: 3, frames: 7 },
+        right: { row: 2, frames: 7 },
+      },
+      run: {
+        left: { row: 5, frames: 15 },
+        right: { row: 4, frames: 15 },
+      },
+      jump: {
+        left: { row: 11, frames: 15 },
+        right: { row: 10, frames: 15 },
+      },
       hitbox: { widthPercentage: 0.3, heightPercentage: 0.8 }
     },
   },
   enemies: {
-    zombie: {
-      src: path + "/images/gamify/zombie.png",
-      width: 32,
-      height: 32,
+    creeper: {
+      src: "/images/gamify/creeper.png",
+      width: 448,
+      height: 452,
       scaleSize: 60,
-      speedRatio: 0.5,
+      speedRatio: 0.7,
+      xPercentage: 0.6,
+      hitbox: { widthPercentage: 0.0, heightPercentage: 0.2 }
     },
-  },
-  npcs: {
-    chicken: { src: path + "/images/gamify/chicken.png", width: 32, height: 32, scaleSize: 60 },
-  },
-  transitions: {
-    end: { src: path + "/images/gamify/loading.jpg" },
-  },
+    enderman: {
+      src: "/images/gamify/enderman.png",
+      width: 448,
+      height: 452,
+      scaleSize: 60,
+      speedRatio: 0.7,
+    },
+  }
 };
 
-// OBJECTS in the level
+// Minecraft Overworld Game Level definition...
 const objects = [
-  { name: 'overworld', id: 'background', class: BackgroundPlat, data: assets.backgrounds.overworld },
-  { name: 'ground', id: 'platform', class: Platform, data: assets.obstacles.grassBlock },
-  { name: 'floating', id: 'jumpPlatform', class: BlockPlatform, data: assets.obstacles.grassBlock, xPercentage: 0.2, yPercentage: 0.7 },
-  { name: 'floating', id: 'jumpPlatform', class: BlockPlatform, data: assets.obstacles.grassBlock, xPercentage: 0.3, yPercentage: 0.6 },
-  { name: 'floating', id: 'jumpPlatform', class: BlockPlatform, data: assets.obstacles.grassBlock, xPercentage: 0.4, yPercentage: 0.5 },
-  { name: 'sword', id: 'sword', class: Sword, data: assets.obstacles.sword, xPercentage: 0.3, yPercentage: 0.55 },
-  { name: 'zombie', id: 'zombie', class: Zombie, data: assets.enemies.zombie, xPercentage: 0.5, minPosition: 0.1 },
-  { name: 'steve', id: 'player', class: PlayerSteve, data: assets.players.steve },
-  { name: 'chicken', id: 'npc', class: Chicken, data: assets.npcs.chicken, xPercentage: 0.9, yPercentage: 0.8 },
-  { name: 'finish', id: 'finishline', class: FinishLine, data: assets.transitions.end, xPercentage: 0.95, yPercentage: 0.85 }
+  { name: 'mountains', id: 'background', class: BackgroundParallax, data: assets.backgrounds.mountains },
+  { name: 'clouds', id: 'background', class: BackgroundParallax, data: assets.backgrounds.clouds },
+  { name: 'grass', id: 'floor', class: Platform, data: assets.platforms.grass },
+  { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.2, yPercentage: 0.85 },
+  { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.2368, yPercentage: 0.85 },
+  { name: 'blocks', id: 'jumpPlatform', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.2736, yPercentage: 0.85 },
+  { name: 'blocks', id: 'wall', class: BlockPlatform, data: assets.platforms.block, xPercentage: 0.6, yPercentage: 1 },
+  { name: 'itemBlock', id: 'jumpPlatform', class: JumpPlatform, data: assets.platforms.itemBlock, xPercentage: 0.4, yPercentage: 0.65 }, //item block is a platform
+  { name: 'creeper', id: 'creeper', class: Creeper, data: assets.enemies.creeper, xPercentage: 0.5, yPercentage: 1, minPosition: 0.05 },
+  { name: 'creeper', id: 'creeper', class: Creeper, data: assets.enemies.creeper, xPercentage: 0.4, yPercentage: 1, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
+  { name: 'creeper', id: 'creeper', class: Creeper, data: assets.enemies.creeper, xPercentage: 0.3, yPercentage: 1, minPosition: 0.05, difficulties: ["normal", "hard", "impossible"] },
+  { name: 'creeper', id: 'creeper', class: Creeper, data: assets.enemies.creeper, xPercentage: 0.2, yPercentage: 1, minPosition: 0.05, difficulties: ["hard", "impossible"] },
+  { name: 'creeper', id: 'creeper', class: Creeper, data: assets.enemies.creeper, xPercentage: 0.1, yPercentage: 1, minPosition: 0.05, difficulties: ["impossible"] },
+  { name: 'creeperSpecial', id: 'creeper', class: Creeper, data: assets.enemies.creeper, xPercentage: 0.75, yPercentage: 1, minPosition: 0.5 },
+  { name: 'creeperSpecial', id: 'creeper', class: Creeper, data: assets.enemies.creeper, xPercentage: 0.95, yPercentage: 1, minPosition: 0.5, difficulties: ["hard", "impossible"] },
+  { name: 'enderman', id: 'enderman', class: Enderman, data: assets.enemies.enderman, xPercentage: 0.9, minPosition: 0.5, difficulties: ["normal", "hard", "impossible"] },
+  { name: 'enderman', id: 'enderman', class: Enderman, data: assets.enemies.enderman, xPercentage: 0.9, minPosition: 0.5, difficulties: ["hard", "impossible"] },
+  { name: 'enderman', id: 'enderman', class: Enderman, data: assets.enemies.enderman, xPercentage: 0.9, minPosition: 0.5, difficulties: ["impossible"] },
+  { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.1908, yPercentage: 0.75 },
+  { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.2242, yPercentage: 0.75 },
+  { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.2575, yPercentage: 0.75 },
+  { name: 'coin', id: 'coin', class: Coin, data: assets.obstacles.coin, xPercentage: 0.5898, yPercentage: 0.900 },
+  { name: 'player', id: 'player', class: PlayerOverworld, data: assets.players.overworld },
+  { name: 'portal', id: 'finishline', class: FinishLine, data: assets.obstacles.tube, xPercentage: 0.85, yPercentage: 0.855 },
+  { name: 'loading', id: 'background', class: BackgroundTransitions, data: assets.transitions.loading },
 ];
 
-// --- Chicken Interaction Feature ---
+const GameSetterOverworld = {
+  tag: 'Overworld',
+  assets: assets,
+  objects: objects
+};
 
-// Helper: Show dialogue box
-function showDialogueBox(message, onClose) {
-  let box = document.createElement('div');
-  box.id = 'dialogue-box';
-  box.style.position = 'fixed';
-  box.style.left = '50%';
-  box.style.top = '70%';
-  box.style.transform = 'translate(-50%, -50%)';
-  box.style.background = 'rgba(0,0,0,0.85)';
-  box.style.color = '#fff';
-  box.style.padding = '24px 32px';
-  box.style.borderRadius = '12px';
-  box.style.fontSize = '1.2em';
-  box.style.zIndex = 9999;
-  box.innerText = message;
-  document.body.appendChild(box);
-
-  function handleEscape(e) {
-    if (e.key === 'Escape') {
-      document.body.removeChild(box);
-      document.removeEventListener('keydown', handleEscape);
-      if (onClose) onClose();
-    }
-  }
-  document.addEventListener('keydown', handleEscape);
-}
-
-// Chicken interaction logic
-let nearChicken = false;
-let dialogueActive = false;
-
-function setupChickenInteraction(gameObjects) {
-  const player = gameObjects.find(obj => obj.name === 'steve');
-  const chicken = gameObjects.find(obj => obj.name === 'chicken');
-  if (!player || !chicken) {
-    console.warn("Player or chicken not found in game objects.");
-    return;
-  }
-
-  console.log("Setup chicken interaction, player and chicken found.");
-
-  // Check proximity each frame
-  function checkProximity() {
-    const px = player.x ?? (player.xPercentage * window.innerWidth);
-    const py = player.y ?? (player.yPercentage * window.innerHeight);
-    const cx = chicken.x ?? (chicken.xPercentage * window.innerWidth);
-    const cy = chicken.y ?? (chicken.yPercentage * window.innerHeight);
-    nearChicken = Math.abs(px - cx) < 60 && Math.abs(py - cy) < 60 && !dialogueActive;
-    requestAnimationFrame(checkProximity);
-  }
-  checkProximity();
-
-  // Listen for 'e' key
-  document.addEventListener('keydown', function onE(e) {
-    if (e.key === 'e' && nearChicken && !dialogueActive) {
-      dialogueActive = true;
-      showDialogueBox("Bawk! You saved me! Thank you!", () => {
-        dialogueActive = false;
-      });
-    }
-  });
-}
-
-// After your game objects are created and added to the game, call this:
-if (typeof window !== 'undefined') {
-  window.addEventListener('game-objects-ready', (e) => {
-    setupChickenInteraction(e.detail.objects);
-  });
-}
-
-// --- Platformer Level Class for GameControl ---
-class GameSetterOverworldLevel {
-  constructor(gameEnv) {
-    this.tag = 'OverworldPlatformer';
-    this.assets = assets;
-    this.objects = objects;
-    this.classes = objects.map(obj => obj.class);  // FIXED: classes must be array of class constructors
-    this.continue = true;
-    console.log('GameSetterOverworldLevel created:', this);
-  }
-
-  create() {
-    console.log("Creating Overworld Platformer Level...");
-    if (typeof window !== 'undefined') {
-      const event = new CustomEvent('game-objects-ready', { detail: { objects: this.objects } });
-      window.dispatchEvent(event);
-    }
-  }
-}
-
-export default GameSetterOverworldLevel;
+export default GameSetterOverworld;

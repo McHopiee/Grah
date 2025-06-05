@@ -1,34 +1,34 @@
-import GameEnv from './PlatformerEngine/GameEnv.js';
-import GameObject from './GamePlatformerObject.js';
+import GameEnv from './GameEnv.js';
+import GameObject from './GameObject.js';
 
 export class Platform extends GameObject {
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        image.src = data.src;
-
+    constructor(canvas, image, data) {
         super(canvas, image, data);
-
-        // Optionally set width/height from data if provided
-        this.width = data.width || image.width;
-        this.height = data.height || image.height;
-        this.speed = data.speed || 1;
-        this.x = data.x || 0;
-        this.y = data.y || 0;
     }
 
-    // Update uses modulo math to cycle to start at width extent
+    /* Update uses modulo math to cycle to start at width extent
+    *  x is position in cycle 
+    *  speed can be used to scroll faster
+    *  width is extent of background image
+    */
     update() {
         this.x = (this.x - this.speed) % this.width;
     }
 
-    // Draws are used to capture primary frame and wrap around to next frame
+    /* To draws are used to capture primary frame and wrap around ot next frame
+     * x to y is primary draw
+     * x + width to y is wrap around draw
+    */
     draw() {
         this.ctx.drawImage(this.image, this.x, this.y);
         this.ctx.drawImage(this.image, this.x + this.width, this.y);
     }
 
-    // Background canvas is set to screen
+    /* Background camvas is set to screen
+     * the ADJUST contant elements portions of image that don't wrap well
+     * the GameEnv.top is a getter used to set canvas under Menu
+     * the GameEnv.bottom is setter used to establish game bottom at offsetHeight of canvas 
+    */ 
     size() {
         // Update canvas size
         const scaledHeight = GameEnv.backgroundHeight / 6;

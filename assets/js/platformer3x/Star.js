@@ -1,17 +1,9 @@
 import GameEnv from './GameEnv.js';
-import GamePlatformerObject from './GamePlatformerObject.js';
+import GameObject from './GameObject.js';
 
-export class Star extends GamePlatformerObject {
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        image.src = data.src;
-
-        // Use xPercentage and yPercentage from data if present, else default to 0.5
-        const xPercentage = data.xPercentage ?? 0.5;
-        const yPercentage = data.yPercentage ?? 0.5;
-
-        super(canvas, image, data, xPercentage, yPercentage);
+export class Star extends GameObject {
+    constructor(canvas, image, data, xPercentage, yPercentage) {
+        super(canvas, image, data, 0.5, 0.5);
         this.starX = xPercentage * GameEnv.innerWidth;
         this.starY = yPercentage;
         this.size();

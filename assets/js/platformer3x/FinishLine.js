@@ -1,32 +1,13 @@
-import GameEnv from './PlatformerEngine/GameEnv.js';
-import GamePlatformerObject from './GamePlatformerObject.js';
+import GameEnv from './GameEnv.js';
+import GameObject from './GameObject.js';
 
-export class FinishLine extends GamePlatformerObject {
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        const path = "/Grah_Blog"
-
-        // Fallback to a default image if src is missing
-        image.src = data.src || path + "/images/gamify/loading.jpg";
-
-        // Extract extra parameters from data if needed
-        const xPercentage = data.xPercentage ?? 0;
-        const yPercentage = data.yPercentage ?? 0;
-
+export class FinishLine extends GameObject {
+    constructor(canvas, image, data, xPercentage, yPercentage) {
         super(canvas, image, data);
-
-        // Use a default aspect ratio if image is not loaded yet
-        this.aspect_ratio = (image.width && image.height) ? image.width / image.height : 1;
+        this.aspect_ratio = image.width / image.height;
         this.x = xPercentage * GameEnv.innerWidth;
-        this.y = yPercentage * GameEnv.innerHeight;
+        this.y = yPercentage * GameEnv.bottom;
         this.scaleSize = data?.scaleSize || 80;
-
-        // Handle image loading for correct aspect ratio
-        image.onload = () => {
-            this.aspect_ratio = image.width / image.height || 1;
-            if (typeof this.size === "function") this.size();
-        };
     }
 
     update() {
@@ -34,7 +15,6 @@ export class FinishLine extends GamePlatformerObject {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.image, 0, 0, this.canvas.width, this.canvas.height);
     }
 

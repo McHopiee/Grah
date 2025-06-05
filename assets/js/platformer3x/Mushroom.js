@@ -1,52 +1,49 @@
 import Character from './Character.js';
-import GameEnv from './PlatformerEngine/GameEnv.js';
-import GameControl from './PlatformerEngine/GameControl.js';
+import GameEnv from './GameEnv.js';
+import GameControl from './GameControl.js';
 
 export class Mushroom extends Character {
-    // constructor sets up Character object 
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        image.src = data.src;
-
-        // Extract extra parameters from data if needed
-        const xPercentage = data.xPercentage ?? 0;
-        const yPercentage = data.yPercentage ?? 0;
-        const name = data.name ?? "Mushroom";
-        const minPosition = data.minPosition ?? 0;
-
+    // constructors sets up Character object 
+    constructor(canvas, image, data, xPercentage, yPercentage, name, minPosition){
         super(canvas, image, data);
 
+        //Unused but must be Defined
         this.name = name;
         this.y = yPercentage;
+
+        //Initial Position 
         this.x = xPercentage * GameEnv.innerWidth;
+
+
         this.minPosition = minPosition * GameEnv.innerWidth;
         this.maxPosition = this.x + xPercentage * GameEnv.innerWidth;
+
         this.immune = 0;
-        this.speed = data.speed || 1;
-        this.canvasWidth = data.width || image.width || 32;
     }
 
     update() {
-        if (super.update) super.update();
+        super.update();
 
         // Check for boundaries
         if (this.x <= this.minPosition || (this.x + this.canvasWidth >= this.maxPosition)) {
             this.speed = -this.speed;
-        }
+        };
 
         // Random Event 2
         if (GameControl.randomEventId === 2 && GameControl.randomEventState === 1) {
             this.speed = 0;
             if (this.name === "goombaSpecial") {
                 GameControl.endRandomEvent();
-            }
-        }
+            };
+        };
+
+
 
         if (GameControl.randomEventId === 3 && GameControl.randomEventState === 1) {
             this.destroy();
             GameControl.endRandomEvent();
-        }
+        };
+
 
         // Chance for Mushroom to turn Gold
         if (["normal", "hard"].includes(GameEnv.difficulty)) {
@@ -66,11 +63,12 @@ export class Mushroom extends Character {
             this.immune = 1;
         }
 
-        // Move the mushroom
-        this.x -= this.speed;
+        // Remove the line that updates the x position based on speed
+        // this.x -= this.speed;
 
         this.playerBottomCollision = false;
     }
+
 
     // Player action on collisions
     collisionAction() {
@@ -82,21 +80,27 @@ export class Mushroom extends Character {
 
         if (this.collisionData.touchPoints.other.id === "player") {
             // Collision: Top of Goomba with Bottom of Player
+            //console.log(this.collisionData.touchPoints.other.bottom + 'bottom')
+            //console.log(this.collisionData.touchPoints.other.top + "top")
+            //console.log(this.collisionData.touchPoints.other.right + "right")
+            //console.log(this.collisionData.touchPoints.other.left + "left")
             if (this.collisionData.touchPoints.other.bottom && this.immune == 0) {
                 GameEnv.invincible = true;
                 GameEnv.goombaBounce1 = true;
+                this.canvas.style.transition = "transform 1.5s, opacity 1s";
                 this.canvas.style.transition = "transform 2s, opacity 1s";
                 this.canvas.style.transformOrigin = "bottom"; 
                 this.canvas.style.transform = "scaleY(0)"; 
                 this.speed = 0;
                 GameEnv.playSound("Mushroom");
 
-                setTimeout(() => {
+                setTimeout((function() {
                     GameEnv.invincible = false;
                     this.destroy();
                     GameEnv.destroyedMushroom = true;
-                }, 1500);
+                }).bind(this), 1500);
             }
+
         }
         if (this.collisionData.touchPoints.other.id === "jumpPlatform") {
             if (this.collisionData.touchPoints.other.left || this.collisionData.touchPoints.other.right) {

@@ -1,4 +1,4 @@
-import GameControl from './PlatformerEngine/GameControl.js';
+import GameControl from './GameControl.js';
 
 function startCutstory() {
     var y = document.getElementById("cut-story");

@@ -1,4 +1,4 @@
-import GameEnv from './PlatformerEngine/GameEnv.js';
+import GameEnv from './GameEnv.js';
 
 export class hpBar {
     constructor(width, height, objectWidth, objectHeight, maxHp, currentHp, x, y) {

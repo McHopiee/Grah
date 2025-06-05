@@ -1,22 +1,24 @@
-import GameEnv from './PlatformerEngine/GameEnv.js';
+import GameEnv from './GameEnv.js';
 import PlayerBaseOneD from './PlayerBaseOneD.js';
-import GameControl from './PlatformerEngine/GameControl.js';
-
+import GameControl from './GameControl.js';
 /**
- * @class PlayerZombie class
- * @description PlayerZombie represents the user-controlled zombie character.
- * @extends PlayerBaseOneD
+ * @class PlayerHills class
+ * @description PlayerHills.js key objective is to eent the user-controlled character in the game.
+ *
+ * The Player class extends the Character class, which in turn extends the GameObject class.
+ * Animations and events are activated by key presses, collisions, and gravity.
+ * WASD keys are used by user to control The Player object.
+ *
+ * @extends PlayerBase
  */
 export class PlayerZombie extends PlayerBaseOneD {
-    /** GameObject instantiation: constructor for PlayerZombie object
+    /** GameObject instantiation: constructor for PlayerHills object
+     * @extends Character
+     * @param {HTMLCanvasElement} canvas - The canvas element to draw the player on.
+     * @param {HTMLImageElement} image - The image to draw the player with.
      * @param {Object} data - The data object containing the player's properties.
-     * @param {Object} gameEnv - The game environment object.
      */
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        image.src = data.src;
-
+    constructor(canvas, image, data) {
         super(canvas, image, data);
         this.invisible = true;
         // Goomba variables, deprecate?

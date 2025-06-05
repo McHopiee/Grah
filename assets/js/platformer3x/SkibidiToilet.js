@@ -1,28 +1,23 @@
 import Character from './Character.js';
-import GameEnv from './PlatformerEngine/GameEnv.js';
-import GameControl from './PlatformerEngine/GameControl.js';
+import GameEnv from './GameEnv.js';
+import GameControl from './GameControl.js';
 
 export class SkibidiToilet extends Character {
-    // constructor sets up Character object 
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        image.src = data.src;
+    // constructors sets up Character object 
+    constructor(canvas, image, data, xPercentage, yPercentage, name, minPosition){
+        super(canvas, image, data, 0.0, 0.2);
 
-        // Extract extra parameters from data if needed
-        const xPercentage = data.xPercentage ?? 0;
-        const yPercentage = data.yPercentage ?? 0;
-        const name = data.name ?? "SkibidiToilet";
-        const minPosition = data.minPosition ?? 0;
-
-        super(canvas, image, data, xPercentage, yPercentage, name, minPosition);
-
-        // Unused but must be Defined
+        //Unused but must be Defined
         this.name = name;
         this.y = yPercentage;
+
+        //Initial Position of Goomba
         this.x = xPercentage * GameEnv.innerWidth;
+
+        //Access in which a Goomba can travel    
         this.minPosition = minPosition * GameEnv.innerWidth;
         this.maxPosition = this.x + xPercentage * GameEnv.innerWidth;
+
         this.immune = 0;
 
         //Define Speed of Enemy

@@ -1,6 +1,6 @@
-import GameEnv from './PlatformerEngine/GameEnv.js';
+import GameEnv from './GameEnv.js';
 import PlayerBase from './PlayerBase.js';
-import GameControl from './PlatformerEngine/GameControl.js';
+import GameControl from './GameControl.js';
 /**
  * @class PlayerHills class
  * @description PlayerHills.js key objective is to eent the user-controlled character in the game.
@@ -18,11 +18,7 @@ export class PlayerBoss extends PlayerBase {
      * @param {HTMLImageElement} image - The image to draw the player with.
      * @param {Object} data - The data object containing the player's properties.
      */
-    constructor(data, gameEnv) {
-        const canvas = document.getElementById('gameCanvas');
-        const image = new window.Image();
-        image.src = data.src;
-
+    constructor(canvas, image, data) {
         super(canvas, image, data);
         // Goomba variables, deprecate?
         this.timer = false;

@@ -1,5 +1,5 @@
-import GameControl from "./PlatformerEngine/GameControl.js";
-import GameEnv from "./PlatformerEngine/GameEnv.js";
+import GameControl from "./GameControl.js";
+import GameEnv from "./GameEnv.js";
 import Socket from "./Multiplayer.js";
 
 const Leaderboard = {
