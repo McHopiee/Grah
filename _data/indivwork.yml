@@ -1,6 +1,6 @@
-# indivdual work on adventure/platformer game 
-Title: "Enemy Collisions and Consequences"
-Description: "For the platformer game, I created the system where when the player collides with the enemy, the player explodes."
+# Individual work on adventure/platformer game 
+Title: "Hope's Work In CSSE2"
+Description: "In this project, I worked on a platformer game and an adventure game with a team. In here, we will go over a quick overview of all I did."
 Topics:
   - title: "Collision in Overworld"
     keyPoints:
@@ -8,10 +8,25 @@ Topics:
       - "Detecting collision"
       - "Consequence when collides with enemy"
       - "Enemy Creeper"
-    description: "The way collision and the consquence of it in both games are almost indentical, the only difference being the hitboxes on both the enemy and the player on both games."
+    description: "The way collision and the consequence of it in both games are almost identical, the only difference being the hitboxes on both the enemy and the player on both games."
   - title: "Collision in Water"
     keyPoints:
       - "Hitboxes"
       - "Detecting collision"
       - "Enemy Shark"
       - "Enemy Pufferfish and Goldfish"
+    description: "The water collision is similar to the overworld collision, but it has different enemies. The player can die in the water, and there are more enemies with different movement properties."
+  - title: "Creating the Game-in-Game"
+    keyPoints:
+      - "Creating a platform inside of the RPG"
+      - "Making it so the player can go back to the Platformer after dying"
+      - "Ensuring that the RPG is paused when the player is in the platformer"
+    description: "The platformer is a game that is made inside of the RPG game, so it is not a separate game. The player can go back to the RPG after dying in the platformer. The platformer canvas goes over the RPG canvas."
+  - title: "Platformer"
+    keyPoints:
+      - "Made inside of the same RPG file so it isn't a separate game"
+      - "Collision with the player and the platformer"
+      - "Collectable items"
+      - "Defeatable Enemy"
+      - "Platformer restarts when player dies"
+    description: "The platformer itself is a simple but fun platformer. It has features like collectable items, a defeatable enemy, and the player can die and restart the platformer. There is some checks in the game, like if the player has collected the item in order to kill the enemy."

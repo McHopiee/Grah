@@ -10,35 +10,26 @@
     <!-- Rows Section -->
     <div id="rows" class="grid gap-6 p-6">
       {% for topic in data.Topics %}
-        <div class="grid md:grid-cols-3 gap-6 items-start p-6 rounded-2xl shadow-lg bg-zinc-800 text-white dark:bg-zinc-900">
+        <div class="p-6 rounded-2xl shadow-lg bg-zinc-800 text-white dark:bg-zinc-900">
+          <!-- Title Across the Top -->
+          <h3 class="text-2xl font-semibold mb-4 font-serif text-center">{{ topic.title }}</h3>
 
-          <!-- Image Column (Optional) -->
-          {% if topic.image %}
-          <div class="text-center">
-            <a href="{{ site.baseurl }}{{ topic.link }}">
-              <img src="{{ site.baseurl }}/images/{{ topic.image }}" alt="{{ topic.alt | default: 'Image' }}" class="rounded-lg mx-auto h-40 object-cover">
-            </a>
+          <!-- Content Section -->
+          <div class="grid md:grid-cols-2 gap-6 items-start">
+            <!-- Key Points Column -->
+            <div>
+              <ul class="list-disc list-outside pl-4 text-sm font-sans">
+                {% for point in topic.keyPoints %}
+                  <li>{{ point }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <!-- Description Column -->
+            <div>
+              <p class="text-sm font-sans whitespace-pre-line">{{ topic.description }}</p>
+            </div>
           </div>
-          {% else %}
-          <div></div>
-          {% endif %}
-
-          <!-- Key Points Column -->
-          <div>
-            <h3 class="text-xl font-semibold mb-2 font-serif">{{ topic.title }}</h3>
-            <ul class="list-disc list-outside pl-4 text-sm font-sans">
-              {% for point in topic.keyPoints %}
-                <li>{{ point }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-
-          <!-- Description Column (styled like codeExplain.html) -->
-          <div>
-            <h4 class="text-lg font-semibold mb-2 font-serif">{{ topic.subtitle }}</h4>
-            <p class="text-sm font-sans whitespace-pre-line">{{ topic.description }}</p>
-          </div>
-
         </div>
       {% endfor %}
     </div>
