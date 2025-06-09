@@ -1,0 +1,39 @@
+<div>
+  {% assign data = include.data %}
+  <div class="container mx-auto">
+    <!-- Header Section -->
+    <div class="p-6 rounded-lg shadow-md text-white bg-zinc-800 dark:bg-zinc-900">
+      <h1 class="text-5xl mb-4 font-serif">{{ data.Title }}</h1>
+      <p class="text-lg mb-4 font-sans">{{ data.Description }}</p>
+    </div>
+
+    <!-- Rows Section -->
+    <div id="rows" class="grid gap-6 p-6">
+      {% for topic in data.Topics %}
+        <div class="p-6 rounded-2xl shadow-lg bg-zinc-800 text-white dark:bg-zinc-900">
+          <!-- Title Across the Top -->
+          <h3 class="text-2xl font-semibold mb-4 font-serif text-center">{{ topic.title }}</h3>
+
+          <!-- Content Section -->
+          {% if topic.image %}
+            <div class="grid md:grid-cols-2 gap-6 items-start">
+              <!-- Image Column -->
+              <div>
+                <img src="{{ topic.image }}" alt="{{ topic.title }}" class="w-full rounded-lg shadow-md">
+              </div>
+
+              <!-- Description Column -->
+              <div>
+                <p class="text-sm font-sans whitespace-pre-line">{{ topic.description }}</p>
+              </div>
+            </div>
+          {% else %}
+            <div>
+              <p class="text-sm font-sans whitespace-pre-line">{{ topic.description }}</p>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

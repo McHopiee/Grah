@@ -1,0 +1,14 @@
+# Individual work on adventure/platformer game 
+Title: "Overworld Presentation at Night of the Museum."
+Description: "Here, we will be going over what was presented during Night of the Museum. How we spoke the people that were interested in our game, and what we showed them."
+Topics:
+  - title: "Introduction"
+    description: "Firstly, we introduced ourselves and the game we were working on. We explained that it was a RPG game that went into a platformer game when interacted with a certain NPC. Along with that, we mentioned the theme for the game; Minecraft."
+  - title: "Game Overview"
+    description: "After that, we went ahead and played our game while making sure that wer were facing them and that we were out of the way from the screen. As we did so, we gave a brief explanation of what went into each feature of the game. We tried to explain it in simplier terms, since not all the people at Night of the Museum were programmers."
+  - title: "Features"
+    description: "Throughout our game, we have multiple special interactions or features that we wanted to make sure was highlighted. For example, we showed that our character could die to the walking Creeper. We also showed that the player could interact with the NPC to go into the platformer game."
+  - title: "Platformer"
+    description: "Then, we interacted with the NPC in order to go into the platformer game that we made. We made some updates to the game now, but before it was a simple, small platformer where the character could jump around with a chicken and a bee wandering around. We explained what went into the movement of the bee and also what happens when the player collides with it."
+  - title: "Code"
+    description: "After a quick overview of the game, if they were interested, we showed them the code that went into our game. Me mainly showed the code that went into the special features that were highlighted during the presentation. We often had two screens up at the same time, so we had an example of the code while making sure that we had an example of what we were talking about on another screen."
